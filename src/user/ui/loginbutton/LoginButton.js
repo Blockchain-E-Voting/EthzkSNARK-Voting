@@ -1,11 +1,11 @@
 import React from 'react'
+import { Menu } from 'semantic-ui-react'
 
 const LoginButton = ({ onLoginUserClick }) => {
+
   return(
-    <li className="pure-menu-item">
-      <a href="#" className="pure-menu-link" onClick={(event) => onLoginUserClick(event)}>Login</a>
-    </li>
-  )
+    <Menu.Item  name='login'  onClick={(event) => onLoginUserClick(event)} />
+   )
 }
 
 export default LoginButton

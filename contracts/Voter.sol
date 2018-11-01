@@ -35,6 +35,12 @@ contract Voter{
 
     }
 
+    //query specific voter details
+      function getVoter(address voterId) public view returns (bytes32,bytes32, bytes32,bool,bool,bool,bool,bool) {
+        VoterDetails memory v = voters[voterId];
+        return (v.name,v.nic,v.hashOfSecret,v.submitted_to_review,v.to_be_deleted,v.to_be_added,v.deleted,v.verified);
+     }
+
     //this should be updated by the grama nildari
     function toBeDeleted(address voterAddress) public{
       voters[voterAddress].submitted_to_review = false;
@@ -66,5 +72,7 @@ contract Voter{
       voters[voterAddress].deleted=true;
       voters[voterAddress].verified=true;
     }
+
+
 
 }

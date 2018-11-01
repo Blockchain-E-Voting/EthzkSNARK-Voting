@@ -1,10 +1,11 @@
 import React from 'react'
+import { Menu } from 'semantic-ui-react'
 
 const LogoutButton = ({ onLogoutUserClick }) => {
+
   return(
-    <li className="pure-menu-item">
-      <a href="#" className="pure-menu-link" onClick={(event) => onLogoutUserClick(event)}>Logout</a>
-    </li>
+    <Menu.Item name='logout'  onClick={(event) => onLogoutUserClick(event)} />
+
   )
 }
 

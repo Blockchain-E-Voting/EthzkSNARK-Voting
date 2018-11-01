@@ -15,6 +15,7 @@ import SignUp from './user/layouts/signup/SignUp'
 import Profile from './user/layouts/profile/Profile'
 import CandidateList from './candidate/ui/candidatelist/CandidateList'
 import RegisterForm from './candidate/ui/register/RegisterForm'
+import VoterList from './voter/ui/voterList/voterList'
 
 // Redux Store
 import store from './store'
@@ -39,8 +40,9 @@ ReactDOM.render((
           <Route path="dashboard" component={UserIsAuthenticated(Dashboard)} />
           <Route path="signup" component={UserIsNotAuthenticated(SignUp)} />
           <Route path="profile" component={UserIsAuthenticated(Profile)} />
-          <Route path="candidate/list" component={UserIsAuthenticated(CandidateList)}/>
-          <Route path="candidate/register" component={UserIsAuthenticated(RegisterForm)}/>
+          <Route path="candidate/list" component={UserIsAuthenticated(CandidateList)} />
+          <Route path="candidate/register" component={UserIsAuthenticated(RegisterForm)} />
+          <Route path="voter/list" component={UserIsAuthenticated(VoterList)} />
         </Route>
       </Router>
     </Provider>
