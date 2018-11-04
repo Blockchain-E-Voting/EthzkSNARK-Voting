@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import store from '../../../store'
 import { VoterContract } from './../../../abi/voterContract'
-import { Form, Message } from "semantic-ui-react";
+import { Form } from "semantic-ui-react";
 
 
 
@@ -60,10 +60,6 @@ class VoterRegForm extends Component {
 
     return(
       <div>
-         <Message info>
-          <p>   Message goes here></p>
-        </Message>
-
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <Form.Group widths="equal">
           <Form.Input fluid  label="First name" id="name"  placeholder="Full Name"  onChange={this.handleChange}/>

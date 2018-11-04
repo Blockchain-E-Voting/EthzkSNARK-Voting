@@ -4,7 +4,8 @@ import { updateUser } from './ProfileFormActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    name: state.user.data.name
+    name: state.user.data.name,
+    id:state.user.data.id
   }
 }
 

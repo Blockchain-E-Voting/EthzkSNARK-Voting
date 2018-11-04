@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { VoterContract } from './../../../abi/voterContract'
 import store from '../../../store'
-import { Form,Input,Grid, Message,Button,Card,Image } from "semantic-ui-react";
+import { Form,Input,Grid, Message,Icon,Card,Image, Loader,Button } from "semantic-ui-react";
 
 class VoterList extends Component {
 
@@ -23,8 +23,12 @@ class VoterList extends Component {
           to_be_added:'',
           deleted:'',
           verified:'',
-          accountstatus:'ds'
+          accountstatus:''
       }
+
+      this.state = {
+      isVisibleState: false
+     }
 
 
   }
@@ -62,7 +66,6 @@ class VoterList extends Component {
     var voterContractInstance;
     voterContractInstance=web3.eth.contract(VoterContract).at('0xa3a41a74e6b46054f3F01fc9B94DD1ad6DB7CD81')
     const voterID = this.state.voterid;
-    console.log(voterID)
     const { getVoter } = voterContractInstance;
     getVoter(voterID,(err,result) => {
       if(err) console.error('An error occured ::', err);
@@ -71,14 +74,15 @@ class VoterList extends Component {
       // console.log(web3.toUtf8(result[2]));
 
       this.setState({
-            name: result[0],
-            nic:result[1],
+            name: web3.toAscii(result[0]),
+            nic:web3.toAscii(result[1]),
             hashofsecret:result[2],
             submitted_to_review:result[3],
             to_be_deleted:result[4],
             to_be_added:result[5],
             deleted:result[6],
             verified:result[7]
+
         })
 
         if ( this.state.deleted ) {
@@ -93,6 +97,11 @@ class VoterList extends Component {
         else if(this.state.submitted_to_review){
           this.setState({accountstatus:"submitted to review. Pending at grama Niladhari"});
         }
+        console.log(this.state)
+        if(result[2]!== "0x0000000000000000000000000000000000000000000000000000000000000000"){
+          this.setState({ isVisibleState:true })
+        }
+
 
 
 
@@ -106,7 +115,7 @@ class VoterList extends Component {
       <Grid celled>
         <Grid.Row>
           <Grid.Column width={7}>
-            <Form onSubmit={this.queryVoterDetails}>
+            <Form onSubmit={this.queryVoterDetails.bind(this)}>
               <Form.Group widths="equal">
                   <Input focus label="voter id" placeholder='Search...' name="voterid" onChange={this.handleChange}/>
               </Form.Group>
@@ -121,40 +130,61 @@ class VoterList extends Component {
                <Message.Header>Account Status</Message.Header>
                <p>
                  { this.state.accountstatus }
+                   <Loader className={ this.state.isVisibleState ? 'disabled' : 'active' } inline='centered' />
                </p>
              </Message>
-
               </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column width={4}>
+          <Grid.Column width={3}>
                <Card.Group>
               <Card>
-                <Card.Content>
-                  <Image floated='right' size='mini' src='/images/avatar/large/matthew.png' />
-                  <Card.Header>{ this.state.name }</Card.Header>
-                  <Card.Meta></Card.Meta>
-                  <Card.Description>
-                    Voter <strong>best friends</strong>
-                  </Card.Description>
-                </Card.Content>
-                <Card.Content extra>
-                  <div className='ui two buttons'>
-                    <Button basic color='green'>
-                      Approve
-                    </Button>
-                    <Button basic color='red'>
-                      Decline
-                    </Button>
-                  </div>
-                </Card.Content>
-              </Card>
-
+                 <Image src='/images/avatar/small/prof.png' />
+                 <Card.Content>
+                   <Card.Header>{ this.state.name }</Card.Header>
+                   <Card.Description></Card.Description>
+                 </Card.Content>
+                 <Card.Content extra>
+                   <a>
+                     <Icon name='user' />
+                     Voter
+                   </a>
+                 </Card.Content>
+               </Card>
               </Card.Group>
           </Grid.Column>
-          <Grid.Column width={6}>
+          <Grid.Column width={7}>
+          <h3>Voter Details</h3><br/>
+               <Card>
+                 <Card.Content>
+                   <Card.Header>NIC</Card.Header>
+                   <Card.Meta></Card.Meta>
+                   <Card.Description>{this.state.nic}
+                    <Loader className={ this.state.isVisibleState ? 'disabled' : 'active' } inline='centered' />
+                   </Card.Description>
+                 </Card.Content>
+               </Card>
+             <Card>
+               <Card.Content style={{ 'word-wrap': 'break-word' }}>
+                 <Card.Header>Hash of Secret</Card.Header>
+                 <Card.Meta></Card.Meta>
+                 <Card.Description>{this.state.hashofsecret}
+                 <Loader className={ this.state.isVisibleState ? 'disabled' : 'active' } inline='centered' />
+                 </Card.Description>
+               </Card.Content>
+             </Card>
           </Grid.Column>
+
           <Grid.Column width={6}>
+            <h3>Actions</h3>
+
+            <Button positive>To be Added List</Button>
+             <Button negative>To be Deleted List</Button>
+             <br/><br/><br/>
+             <Button positive>Delete</Button>
+              <Button negative>Verify</Button>
+              <br/><br/><br/>
+                <Button primary>View Documents</Button>
           </Grid.Column>
         </Grid.Row>
       </Grid>

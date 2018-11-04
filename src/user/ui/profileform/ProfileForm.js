@@ -5,7 +5,8 @@ class ProfileForm extends Component {
   constructor(props,{authData}) {
     super(props)
     this.state = {
-      name: this.props.name
+      name: this.props.name,
+      id: this.props.id
     }
 
   }
@@ -26,7 +27,6 @@ class ProfileForm extends Component {
   }
 
   render() {
-
     return(
         <Grid celled>
          <Grid.Row>
@@ -66,7 +66,8 @@ class ProfileForm extends Component {
           </Grid.Column>
 
           <Grid.Column width={6}>
-
+          <h2>User Identity</h2><br/>
+              { this.state.id }
           </Grid.Column>
 
          </Grid.Row>
