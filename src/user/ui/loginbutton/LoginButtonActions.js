@@ -39,11 +39,11 @@ export function loginUser() {
 
           // Attempt to login user.
           authenticationInstance.login({from: coinbase},function(err,result){
-
-              if(result){
+              if(result.length>2){
                     //  console.log(coinbase);
                       // If no error, login user.
                       var userName = web3.toAscii(result)
+                      console.log("dsd")
 
                       dispatch(userLoggedIn({"name": userName,"id":coinbase}))
 
