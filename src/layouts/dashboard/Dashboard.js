@@ -24,7 +24,10 @@ class Dashboard extends Component {
 
   componentDidMount() {
    this.getuserData();
+   //this.checkHash();
  }
+
+
 
  getuserData(event){
    let web3 = store.getState().web3.web3Instance
@@ -56,7 +59,7 @@ class Dashboard extends Component {
                }
                else if (this.state.verified) {
                  this.setState({
-                   accountstatus:"Your Voting Account has been verified. wait for the election start",
+                   accountstatus:"Your Voting Account has been verified. wait for the election to start",
                    stage1:false, stage2:false,stage3:false,stage4:true,stage5:false
                  });
                }
@@ -79,7 +82,7 @@ class Dashboard extends Component {
                  });
                }
 
-       console.log(result)
+      // console.log(result)
 
      })
 
@@ -89,6 +92,11 @@ class Dashboard extends Component {
   render() {
 
    // console.log(this.props.authData);
+   let content;
+   if(this.state.stage1){
+     content=  <VoterRegForm/>
+   }
+
     return(
       <Grid celled>
        <Grid.Row>
@@ -145,7 +153,7 @@ class Dashboard extends Component {
             <Message info>
              <p> { this.state.accountstatus }</p>
            </Message>
-            <VoterRegForm/>
+            {content}
             </Grid.Column>
           </Grid.Row>
         </Grid>

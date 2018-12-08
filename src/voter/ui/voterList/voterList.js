@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { VoterContract } from './../../../abi/voterContract'
 import store from '../../../store'
-import { Form,Input,Grid, Message,Icon,Card,Image, Loader,Button } from "semantic-ui-react";
+import { Form,Input,Grid,Icon,Card,Image, Loader,Button } from "semantic-ui-react";
 
 class VoterList extends Component {
 
@@ -12,6 +12,10 @@ class VoterList extends Component {
     this.queryNumofVoters=this.queryNumofVoters.bind(this)
     this.queryVoterDetails=this.queryVoterDetails.bind(this)
     this.handleChange=this.handleChange.bind(this)
+    this.to_be_added_list=this.to_be_added_list.bind(this)
+    this.to_be_deleted_list=this.to_be_deleted_list.bind(this)
+    this.deleteVoter=this.deleteVoter.bind(this)
+    this.verifyVoter=this.verifyVoter.bind(this)
 
     this.state = {
           voter_id:'',
@@ -23,12 +27,18 @@ class VoterList extends Component {
           to_be_added:'',
           deleted:'',
           verified:'',
-          accountstatus:''
+          accountstatus:'',
+          is_grid_visible:false
+
       }
 
       this.state = {
       isVisibleState: false
      }
+
+     this.web3 = store.getState().web3.web3Instance
+     //let voterContractInstance;
+     this.voterContractInstance=this.web3.eth.contract(VoterContract).at('0xa3a41a74e6b46054f3F01fc9B94DD1ad6DB7CD81')
 
 
   }
@@ -50,10 +60,8 @@ class VoterList extends Component {
 }
 
   queryNumofVoters (){
-    let web3 = store.getState().web3.web3Instance
-    var voterContractInstance;
-    voterContractInstance=web3.eth.contract(VoterContract).at('0xa3a41a74e6b46054f3F01fc9B94DD1ad6DB7CD81')
-    const { getNumOfVoters } = voterContractInstance;
+
+    const { getNumOfVoters } = this.voterContractInstance;
     getNumOfVoters((err,num)=>{
       if(err) console.error('An error occured ::', err);
       console.log(num.toNumber());
@@ -61,12 +69,14 @@ class VoterList extends Component {
 
   }
 
+  clearGrid(event){
+    this.setState({ is_grid_visible:false });
+  }
+
   queryVoterDetails (event){
-      let web3 = store.getState().web3.web3Instance
-    var voterContractInstance;
-    voterContractInstance=web3.eth.contract(VoterContract).at('0xa3a41a74e6b46054f3F01fc9B94DD1ad6DB7CD81')
+
     const voterID = this.state.voterid;
-    const { getVoter } = voterContractInstance;
+    const { getVoter } = this.voterContractInstance;
     getVoter(voterID,(err,result) => {
       if(err) console.error('An error occured ::', err);
       // console.log(web3.toUtf8(result[3]));
@@ -74,15 +84,14 @@ class VoterList extends Component {
       // console.log(web3.toUtf8(result[2]));
 
       this.setState({
-            name: web3.toAscii(result[0]),
-            nic:web3.toAscii(result[1]),
+            name: this.web3.toAscii(result[0]),
+            nic:this.web3.toAscii(result[1]),
             hashofsecret:result[2],
             submitted_to_review:result[3],
             to_be_deleted:result[4],
             to_be_added:result[5],
             deleted:result[6],
-            verified:result[7]
-
+            verified:result[7],
         })
 
         if ( this.state.deleted ) {
@@ -97,9 +106,9 @@ class VoterList extends Component {
         else if(this.state.submitted_to_review){
           this.setState({accountstatus:"submitted to review. Pending at grama Niladhari"});
         }
-        console.log(this.state)
+        //console.log(this.state)
         if(result[2]!== "0x0000000000000000000000000000000000000000000000000000000000000000"){
-          this.setState({ isVisibleState:true })
+          this.setState({ isVisibleState:true, is_grid_visible:true })
         }
 
 
@@ -109,37 +118,61 @@ class VoterList extends Component {
     //event.preventDefault()
   }
 
+
+  to_be_added_list(){
+    this.web3.eth.getCoinbase((error, coinbase) => {
+      // Log errors, if any.
+      if (error) {
+        console.error(error);
+      }
+
+      this.voterContractInstance.toBeAdded('0x4432Ec4E9378F08E6fbacE81B168c461cffd6D47', {from: coinbase},function(err,result){
+        // If no error, update user.
+          if(err){
+            console.log(err)
+          }
+
+      })
+
+    })
+
+  }
+
+  to_be_deleted_list(){
+    alert("ok add to deleted list")
+  }
+
+  deleteVoter(){
+    alert("voter deleted")
+  }
+
+  verifyVoter(){
+    alert("voter verified")
+  }
+
   render(){
 
     return(
-      <Grid celled>
-        <Grid.Row>
-          <Grid.Column width={7}>
-            <Form onSubmit={this.queryVoterDetails.bind(this)}>
-              <Form.Group widths="equal">
-                  <Input focus label="voter id" placeholder='Search...' name="voterid" onChange={this.handleChange}/>
-              </Form.Group>
-              <Form.Group inline>
-                  <Form.Button primary>Search</Form.Button>
-                  <Form.Button>Reset</Form.Button>
-                </Form.Group>
-           </Form>
-          </Grid.Column>
-            <Grid.Column width={9}>
-            <Message positive>
-               <Message.Header>Account Status</Message.Header>
-               <p>
-                 { this.state.accountstatus }
-                   <Loader className={ this.state.isVisibleState ? 'disabled' : 'active' } inline='centered' />
-               </p>
-             </Message>
-              </Grid.Column>
-        </Grid.Row>
+      <div>
+
+    <Form>
+      <Form.Group widths="equal">
+          <Input focus label="voter id" placeholder='Search...' name="voterid" onChange={this.handleChange}/>
+      </Form.Group>
+      <Form.Group inline>
+          <Form.Button onClick={this.queryVoterDetails.bind(this)} primary>Search</Form.Button>
+          <Form.Button onClick={this.clearGrid.bind(this)}>Reset</Form.Button>
+        </Form.Group>
+   </Form>
+
+
+      <br/><br/>
+      <Grid celled className={this.state.is_grid_visible? "visible" : "hidden"}>
         <Grid.Row>
           <Grid.Column width={3}>
                <Card.Group>
               <Card>
-                 <Image src='/images/avatar/small/prof.png' />
+                 <Image src='/images/avatar/small/user.jpeg' />
                  <Card.Content>
                    <Card.Header>{ this.state.name }</Card.Header>
                    <Card.Description></Card.Description>
@@ -155,39 +188,38 @@ class VoterList extends Component {
           </Grid.Column>
           <Grid.Column width={7}>
           <h3>Voter Details</h3><br/>
-               <Card>
-                 <Card.Content>
-                   <Card.Header>NIC</Card.Header>
-                   <Card.Meta></Card.Meta>
-                   <Card.Description>{this.state.nic}
-                    <Loader className={ this.state.isVisibleState ? 'disabled' : 'active' } inline='centered' />
-                   </Card.Description>
-                 </Card.Content>
-               </Card>
-             <Card>
-               <Card.Content style={{ 'word-wrap': 'break-word' }}>
-                 <Card.Header>Hash of Secret</Card.Header>
-                 <Card.Meta></Card.Meta>
-                 <Card.Description>{this.state.hashofsecret}
-                 <Loader className={ this.state.isVisibleState ? 'disabled' : 'active' } inline='centered' />
-                 </Card.Description>
-               </Card.Content>
-             </Card>
-          </Grid.Column>
 
+            <h5>Account status</h5>
+                 { this.state.accountstatus }
+                   <Loader className={ this.state.isVisibleState ? 'disabled' : 'active' } inline='centered' />
+
+            <h5>NIC</h5>
+            {this.state.nic}
+            <Loader className={ this.state.isVisibleState ? 'disabled' : 'active' } inline='centered' />
+            <h5>Hash of Secret</h5>
+            {this.state.hashofsecret}
+           <Loader className={ this.state.isVisibleState ? 'disabled' : 'active' } inline='centered' />
+          </Grid.Column>
           <Grid.Column width={6}>
             <h3>Actions</h3>
-
-            <Button positive>To be Added List</Button>
-             <Button negative>To be Deleted List</Button>
+            <Form>
+             <Form.Field>
+               <label>Identity</label>
+               <input placeholder='Identity' />
+             </Form.Field>
+            </Form>
+            <br/>
+            <Button positive onClick={this.to_be_added_list}>To be Added List</Button>
+             <Button negative onClick={this.to_be_deleted_list}>To be Deleted List</Button>
              <br/><br/><br/>
-             <Button positive>Delete</Button>
-              <Button negative>Verify</Button>
+             <Button positive onClick={this.deleteVoter}>Delete</Button>
+              <Button negative onClick={this.verifyVoter}>Verify</Button>
               <br/><br/><br/>
                 <Button primary>View Documents</Button>
           </Grid.Column>
         </Grid.Row>
       </Grid>
+      </div>
     )
   }
 

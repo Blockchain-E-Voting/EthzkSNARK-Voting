@@ -1,24 +1,41 @@
 import React, { Component } from 'react'
+import { Image, Input, Header,Grid,Button } from 'semantic-ui-react'
 
 class Home extends Component {
   render() {
+    const pstyle = {
+      color:"#603131"
+    };
     return(
       <main className="container">
-        <div className="pure-g">
-          <div className="pure-u-1-1">
-            <h1>Good to Go!</h1>
-            <p>Your Truffle Box is installed and ready.</p>
-            <h2>Smart Contract Authentication</h2>
-            <p>This particular box comes with autentication via a smart contract built-in.</p>
-            <p>In the upper-right corner, you'll see a login button. Click it to login with with the Authentication smart contract. If there is no user information for the given address, you'll be redirected to sign up. There are two authenticated routes: "/dashboard", which displays the user's name once authenticated; and "/profile", which allows a user to update their name.</p>
-            <h3>Redirect Path</h3>
-            <p>This example redirects home ("/") when trying to access an authenticated route without first authenticating. You can change this path in the failureRedriectUrl property of the UserIsAuthenticated wrapper on <strong>line 9</strong> of util/wrappers.js.</p>
-            <h3>Accessing User Data</h3>
-            <p>Once authenticated, any component can access the user's data by assigning the authData object to a component's props.<br/><code>{"// In component's render function."}<br/>{"const { authData } = this.props"}<br/><br/>{"// Use in component."}<br/>{"Hello { this.props.authData.name }!"}</code></p>
-            <h3>Further Reading</h3>
-            <p>The React/Redux portions of the authentication fuctionality are provided by <a href="https://github.com/mjrussell/redux-auth-wrapper" target="_blank">mjrussell/redux-auth-wrapper</a>.</p>
-          </div>
-        </div>
+
+      <div>
+       <Header as='h2' icon textAlign='center'>
+
+         <Header.Content>Electronic Voting System</Header.Content>
+       </Header>
+       <Image centered size='small' src='/images/voting/voting.png' />
+     </div>
+     <br/>
+
+     <Grid columns={3}>
+      <Grid.Row>
+        <Grid.Column>
+
+        </Grid.Column>
+        <Grid.Column>
+         <Input size="big" fluid icon='search' placeholder='Transaction Id...' />
+         <p style={pstyle}>Verify your vote by entering transaction id</p>
+         <br/>
+         <Button active>Sign In</Button>&nbsp;&nbsp;&nbsp;&nbsp;
+         <Button active>Register</Button>
+        </Grid.Column>
+        <Grid.Column>
+
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
+
       </main>
     )
   }
