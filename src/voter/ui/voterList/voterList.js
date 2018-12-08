@@ -126,7 +126,7 @@ class VoterList extends Component {
         console.error(error);
       }
 
-      this.voterContractInstance.toBeAdded('0x4432Ec4E9378F08E6fbacE81B168c461cffd6D47', {from: coinbase},function(err,result){
+      this.voterContractInstance.toBeAdded(this.state.voterid, {from: coinbase},function(err,result){
         // If no error, update user.
           if(err){
             console.log(err)
@@ -139,15 +139,57 @@ class VoterList extends Component {
   }
 
   to_be_deleted_list(){
-    alert("ok add to deleted list")
+    this.web3.eth.getCoinbase((error, coinbase) => {
+      // Log errors, if any.
+      if (error) {
+        console.error(error);
+      }
+
+      this.voterContractInstance.toBeDeleted(this.state.voterid, {from: coinbase},function(err,result){
+        // If no error, update user.
+          if(err){
+            console.log(err)
+          }
+
+      })
+
+    })
   }
 
   deleteVoter(){
-    alert("voter deleted")
+    this.web3.eth.getCoinbase((error, coinbase) => {
+      // Log errors, if any.
+      if (error) {
+        console.error(error);
+      }
+
+      this.voterContractInstance.deleted(this.state.voterid, {from: coinbase},function(err,result){
+        // If no error, update user.
+          if(err){
+            console.log(err)
+          }
+
+      })
+
+    })
   }
 
   verifyVoter(){
-    alert("voter verified")
+    this.web3.eth.getCoinbase((error, coinbase) => {
+      // Log errors, if any.
+      if (error) {
+        console.error(error);
+      }
+
+      this.voterContractInstance.verified(this.state.voterid, {from: coinbase},function(err,result){
+        // If no error, update user.
+          if(err){
+            console.log(err)
+          }
+
+      })
+
+    })
   }
 
   render(){
@@ -205,7 +247,7 @@ class VoterList extends Component {
             <Form>
              <Form.Field>
                <label>Identity</label>
-               <input placeholder='Identity' />
+               <input  value={this.state.voterid} />
              </Form.Field>
             </Form>
             <br/>

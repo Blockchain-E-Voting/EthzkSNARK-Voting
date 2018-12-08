@@ -69,7 +69,7 @@ contract Voter{
       voters[voterAddress].submitted_to_review=false;
       voters[voterAddress].to_be_added=false;
       voters[voterAddress].to_be_deleted=false;
-      voters[voterAddress].deleted=true;
+      voters[voterAddress].deleted=false;
       voters[voterAddress].verified=true;
     }
 
