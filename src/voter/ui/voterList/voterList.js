@@ -16,6 +16,7 @@ class VoterList extends Component {
     this.to_be_deleted_list=this.to_be_deleted_list.bind(this)
     this.deleteVoter=this.deleteVoter.bind(this)
     this.verifyVoter=this.verifyVoter.bind(this)
+    this.resetVoter=this.resetVoter.bind(this)
 
     this.state = {
           voter_id:'',
@@ -38,7 +39,7 @@ class VoterList extends Component {
 
      this.web3 = store.getState().web3.web3Instance
      //let voterContractInstance;
-     this.voterContractInstance=this.web3.eth.contract(VoterContract).at('0xa3a41a74e6b46054f3F01fc9B94DD1ad6DB7CD81')
+     this.voterContractInstance=this.web3.eth.contract(VoterContract).at('0x3Ac0981334cdc521bb88B8abf724995076a5Ec55')
 
 
   }
@@ -92,6 +93,7 @@ class VoterList extends Component {
             to_be_added:result[5],
             deleted:result[6],
             verified:result[7],
+            temp_registered:result[8]
         })
 
         if ( this.state.deleted ) {
@@ -105,6 +107,9 @@ class VoterList extends Component {
         }
         else if(this.state.submitted_to_review){
           this.setState({accountstatus:"submitted to review. Pending at grama Niladhari"});
+        }
+        else if(this.state.temp_registered){
+          this.setState({accountstatus:"This account has been reset."})
         }
         //console.log(this.state)
         if(result[2]!== "0x0000000000000000000000000000000000000000000000000000000000000000"){
@@ -192,6 +197,24 @@ class VoterList extends Component {
     })
   }
 
+  resetVoter(){
+    this.web3.eth.getCoinbase((error, coinbase) => {
+      // Log errors, if any.
+      if (error) {
+        console.error(error);
+      }
+
+      this.voterContractInstance.reset(this.state.voterid, {from: coinbase},function(err,result){
+        // If no error, update user.
+          if(err){
+            console.log(err)
+          }
+
+      })
+
+    })
+  }
+
   render(){
 
     return(
@@ -256,6 +279,7 @@ class VoterList extends Component {
              <br/><br/><br/>
              <Button positive onClick={this.deleteVoter}>Delete</Button>
               <Button negative onClick={this.verifyVoter}>Verify</Button>
+              <Button negative onClick={this.resetVoter}>Reset</Button>
               <br/><br/><br/>
                 <Button primary>View Documents</Button>
           </Grid.Column>

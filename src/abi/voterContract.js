@@ -36,6 +36,10 @@ const VoterContract=[
 			{
 				"name": "",
 				"type": "bool"
+			},
+			{
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"payable": false,
@@ -51,6 +55,20 @@ const VoterContract=[
 			}
 		],
 		"name": "deleted",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "voterAddress",
+				"type": "address"
+			}
+		],
+		"name": "reset",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -133,6 +151,10 @@ const VoterContract=[
 			{
 				"name": "",
 				"type": "bytes32"
+			},
+			{
+				"name": "",
+				"type": "bool"
 			},
 			{
 				"name": "",

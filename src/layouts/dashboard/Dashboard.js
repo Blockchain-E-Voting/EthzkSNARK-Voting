@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import VoterRegForm from '../../voter/ui/voterRegistration/VoterRegForm'
+import countDown from '../../voter/ui/countDown/CountDown'
 import { Icon, Step, Grid, Message } from 'semantic-ui-react'
 import { VoterContract } from './../../abi/voterContract'
 import store from '../../store'
@@ -9,7 +10,7 @@ class Dashboard extends Component {
     super(props)
     authData = this.props
     this.state = {
-          registered:'',
+          temp_registered:'',
           name: '',
           nic:'',
           hashofsecret:'',
@@ -32,7 +33,7 @@ class Dashboard extends Component {
  getuserData(event){
    let web3 = store.getState().web3.web3Instance
    var voterContractInstance;
-   voterContractInstance=web3.eth.contract(VoterContract).at('0xa3a41a74e6b46054f3F01fc9B94DD1ad6DB7CD81')
+   voterContractInstance=web3.eth.contract(VoterContract).at('0x3Ac0981334cdc521bb88B8abf724995076a5Ec55')
    const voterID = this.props.authData.id
    const { getVoter } = voterContractInstance;
    getVoter(voterID,(err,result) => {
@@ -46,7 +47,8 @@ class Dashboard extends Component {
            to_be_deleted:result[4],
            to_be_added:result[5],
            deleted:result[6],
-           verified:result[7]
+           verified:result[7],
+           temp_registered:result[8]
 
        })
 
@@ -75,6 +77,12 @@ class Dashboard extends Component {
                    stage1:false, stage2:true,stage3:false,stage4:false,stage5:false
                  });
                }
+               else if(this.state.temp_registered){
+                 this.setState({
+                   accountstatus:"Your account has been reset.Please fill the registration form again",
+                   stage1:true, stage2:false,stage3:false,stage4:false,stage5:false
+                 });
+               }
                else if(result[2] === "0x0000000000000000000000000000000000000000000000000000000000000000"){
                  this.setState({
                    accountstatus:"Register for the election by filling out below form",
@@ -95,6 +103,8 @@ class Dashboard extends Component {
    let content;
    if(this.state.stage1){
      content=  <VoterRegForm/>
+   }else if(this.state.state4){
+     content= <countDown/>
    }
 
     return(

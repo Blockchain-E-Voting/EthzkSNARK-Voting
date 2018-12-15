@@ -36,7 +36,7 @@ class VoterRegForm extends Component {
    const fullname = this.state.name;
    const nic = this.state.nic;
    const secret = web3.sha3(this.state.secret);
-   const voterCon = web3.eth.contract(VoterContract).at('0xa3a41a74e6b46054f3F01fc9B94DD1ad6DB7CD81');
+   const voterCon = web3.eth.contract(VoterContract).at('0x3Ac0981334cdc521bb88B8abf724995076a5Ec55');
 
    web3.eth.getCoinbase((error, coinbase) => {
      // Log errors, if any.
