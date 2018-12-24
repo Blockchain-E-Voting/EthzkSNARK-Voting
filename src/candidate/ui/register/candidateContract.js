@@ -9,11 +9,7 @@ const candidateContract =
 				"type": "bytes32"
 			},
 			{
-				"name": "postaladdress",
-				"type": "bytes32"
-			},
-			{
-				"name": "nationality",
+				"name": "nic",
 				"type": "bytes32"
 			},
 			{
@@ -21,7 +17,7 @@ const candidateContract =
 				"type": "bytes32"
 			}
 		],
-		"name": "registerCandidate",
+		"name": "addCandidate",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -31,51 +27,12 @@ const candidateContract =
 		"constant": true,
 		"inputs": [
 			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "candidateinfo",
-		"outputs": [
-			{
-				"name": "name",
-				"type": "bytes32"
-			},
-			{
-				"name": "postaladdress",
-				"type": "bytes32"
-			},
-			{
-				"name": "nationality",
-				"type": "bytes32"
-			},
-			{
-				"name": "party",
-				"type": "bytes32"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "candidateID",
+				"name": "candidateId",
 				"type": "uint256"
 			}
 		],
 		"name": "getCandidate",
 		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"name": "",
-				"type": "bytes32"
-			},
 			{
 				"name": "",
 				"type": "bytes32"
@@ -110,4 +67,4 @@ const candidateContract =
 ]
 //const candidateContract = web3.eth.contract(abi).at('0x5522F5943341f5Ad7DF99dE7d81B64Fb61F52D3a')
 
-export {candidateContract};
+export { candidateContract };

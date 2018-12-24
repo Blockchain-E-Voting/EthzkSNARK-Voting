@@ -26,15 +26,21 @@ class RegisterForm extends Component {
  handleSubmit(event) {
    let web3 = store.getState().web3.web3Instance
    var candidateContractInstance;
-   candidateContractInstance=web3.eth.contract(candidateContract).at('0x5522F5943341f5Ad7DF99dE7d81B64Fb61F52D3a')
+   candidateContractInstance=web3.eth.contract(candidateContract).at('0x8B74F1C1235f2dC2821338bcA739cD70306D394F')
    const fullname = this.state.name
-   const address= this.state.address
-   const nationality = this.state.nationality
+   const nic= this.state.nic
+   const party = this.state.party
    console.log(fullname)
-   candidateContractInstance.registerCandidate(fullname,address,nationality,"ABC", (error, txHash) => {
-     if (error) { throw error }
-     console.log(txHash)
-   })
+   web3.eth.getCoinbase((error, coinbase) => {
+     // Log errors, if any.
+     if (error) {
+       console.error(error);
+     }
+       candidateContractInstance.addCandidate(fullname,nic,party,{from: coinbase}, (error, txHash) => {
+         if (error) { throw error }
+         console.log(txHash)
+       })
+     })
 
    event.preventDefault()
 
@@ -58,13 +64,13 @@ class RegisterForm extends Component {
             </div>
 
             <div className="pure-control-group">
-             <label htmlFor="address">Address</label>
-             <input type="text" name="address" id="address" onChange={this.handleChange} />
+             <label htmlFor="nic">NIC</label>
+             <input type="text" name="nic" id="nic" onChange={this.handleChange} />
             </div>
 
             <div className="pure-control-group">
-             <label htmlFor="nationality">Nationality</label>
-             <input type="text"  name="nationality" id="nationality" onChange={this.handleChange} />
+             <label htmlFor="party">Party</label>
+             <input type="text"  name="party" id="party" onChange={this.handleChange} />
             </div>
 
             <div className="pure-controls">

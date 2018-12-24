@@ -14,8 +14,7 @@ class CandidateList extends Component {
 
     this.state = {
           name: '',
-          postaladdress:'',
-          nationality:'',
+          nic:'',
           party:''
       }
 
@@ -41,11 +40,11 @@ class CandidateList extends Component {
   queryNumofCandidates (){
     let web3 = store.getState().web3.web3Instance
     var candidateContractInstance;
-    candidateContractInstance=web3.eth.contract(candidateContract).at('0x5522F5943341f5Ad7DF99dE7d81B64Fb61F52D3a')
+    candidateContractInstance=web3.eth.contract(candidateContract).at('0x8B74F1C1235f2dC2821338bcA739cD70306D394F')
     const { getNumOfCandidates } = candidateContractInstance;
     getNumOfCandidates((err,num)=>{
       if(err) console.error('An error occured ::', err);
-      console.log(num.toNumber());
+      //console.log(num.toNumber());
     })
 
   }
@@ -53,7 +52,7 @@ class CandidateList extends Component {
   queryCandidateDetails (event){
       let web3 = store.getState().web3.web3Instance
     var candidateContractInstance;
-    candidateContractInstance=web3.eth.contract(candidateContract).at('0x5522F5943341f5Ad7DF99dE7d81B64Fb61F52D3a')
+    candidateContractInstance=web3.eth.contract(candidateContract).at('0x8B74F1C1235f2dC2821338bcA739cD70306D394F')
     const candidateID = this.state.candidateid;
     console.log(candidateID)
     const { getCandidate } = candidateContractInstance;
@@ -62,12 +61,12 @@ class CandidateList extends Component {
       // console.log(web3.toUtf8(result[3]));
       // console.log(web3.toUtf8(result[1]));
       // console.log(web3.toUtf8(result[2]));
+      // console.log(web3.toUtf8(result[1]))
 
       this.setState({
-            name: web3.toUtf8(result[1]),
-            postaladdress: web3.toUtf8(result[2]),
-            nationality:web3.toUtf8(result[3]),
-            party:web3.toUtf8(result[4])
+            name: web3.toUtf8(result[0]),
+            nic:web3.toUtf8(result[1]),
+            party:web3.toUtf8(result[2])
         })
 
     })
@@ -100,14 +99,10 @@ class CandidateList extends Component {
            </p>
 
            <p>
-             <strong>Postal address</strong><br />
-             {this.state.postaladdress}
+             <strong>NIC</strong><br />
+             {this.state.nic}
            </p>
 
-           <p>
-             <strong>Nationality</strong><br />
-             {this.state.nationality}
-           </p>
 
            <p>
              <strong>Party</strong><br />

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import VoterRegForm from '../../voter/ui/voterRegistration/VoterRegForm'
-import countDown from '../../voter/ui/countDown/CountDown'
+import ElectionCountDown from '../../voter/ui/countDown/ElectionCountDown'
 import { Icon, Step, Grid, Message } from 'semantic-ui-react'
 import { VoterContract } from './../../abi/voterContract'
 import store from '../../store'
@@ -103,8 +103,8 @@ class Dashboard extends Component {
    let content;
    if(this.state.stage1){
      content=  <VoterRegForm/>
-   }else if(this.state.state4){
-     content= <countDown/>
+   }else if(this.state.stage4){
+     content= <ElectionCountDown/>
    }
 
     return(

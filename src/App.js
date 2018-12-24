@@ -23,6 +23,7 @@ class App extends Component {
         <Menu.Item as={Link}  name='Voters'  to="/voter/list" />
         <Menu.Item as={Link}  name='Candidate List'  to="/candidate/list" />
         <Menu.Item as={Link}  name='Candidate Register'  to="/candidate/register" />
+        <Menu.Item as={Link}  name='Adminr'  to="/admin" />
         <LogoutButtonContainer />
       </Menu>
     )

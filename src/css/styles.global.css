@@ -1,1 +1,5 @@
 @import '~semantic-ui-css/semantic.css';
+
+body{
+  background-color: #f7f7f7 !important;
+}

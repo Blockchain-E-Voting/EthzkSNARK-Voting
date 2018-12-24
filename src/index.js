@@ -11,6 +11,7 @@ import getWeb3 from './util/web3/getWeb3'
 import App from './App'
 import Home from './layouts/home/Home'
 import Dashboard from './layouts/dashboard/Dashboard'
+import AdminDashLayout from './layouts/adminDashboard/Dashboard'
 import SignUp from './user/layouts/signup/SignUp'
 import Profile from './user/layouts/profile/Profile'
 import CandidateList from './candidate/ui/candidatelist/CandidateList'
@@ -43,6 +44,7 @@ ReactDOM.render((
           <Route path="candidate/list" component={UserIsAuthenticated(CandidateList)} />
           <Route path="candidate/register" component={UserIsAuthenticated(RegisterForm)} />
           <Route path="voter/list" component={UserIsAuthenticated(VoterList)} />
+          <Route path="admin" component={UserIsAuthenticated(AdminDashLayout)} />
         </Route>
       </Router>
     </Provider>
