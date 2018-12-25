@@ -25,7 +25,6 @@ class Dashboard extends Component {
 
   componentDidMount() {
    this.getuserData();
-   //this.checkHash();
  }
 
 
@@ -97,6 +96,7 @@ class Dashboard extends Component {
  }
 
 
+
   render() {
 
    // console.log(this.props.authData);
@@ -132,7 +132,7 @@ class Dashboard extends Component {
             <Icon name='id card' />
             <Step.Content>
               <Step.Title>Pending</Step.Title>
-              <Step.Description>Pending at District officei</Step.Description>
+              <Step.Description>Pending at District office</Step.Description>
             </Step.Content>
           </Step>
 

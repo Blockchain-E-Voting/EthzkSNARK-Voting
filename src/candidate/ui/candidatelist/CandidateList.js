@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { candidateContract } from './../register/candidateContract'
 import store from '../../../store'
+import { Button,  Divider, Checkbox, Label, Form,Grid, Segment, Input, Icon } from "semantic-ui-react";
 
 class CandidateList extends Component {
 
@@ -15,7 +16,8 @@ class CandidateList extends Component {
     this.state = {
           name: '',
           nic:'',
-          party:''
+          party:'',
+          candidates:[],
       }
 
 
@@ -23,7 +25,7 @@ class CandidateList extends Component {
 
   componentDidMount() {
    this.queryNumofCandidates();
-   this.queryCandidateDetails();
+   //this.queryCandidateDetails();
  }
 
 
@@ -37,17 +39,34 @@ class CandidateList extends Component {
     });
 }
 
-  queryNumofCandidates (){
-    let web3 = store.getState().web3.web3Instance
-    var candidateContractInstance;
-    candidateContractInstance=web3.eth.contract(candidateContract).at('0x8B74F1C1235f2dC2821338bcA739cD70306D394F')
-    const { getNumOfCandidates } = candidateContractInstance;
-    getNumOfCandidates((err,num)=>{
-      if(err) console.error('An error occured ::', err);
-      //console.log(num.toNumber());
-    })
-
+  handleAddCandidate = (candidateName,party) => {
+   this.setState({ candidates: this.state.candidates.concat([{ name: candidateName, party: party }]) });
   }
+
+queryNumofCandidates (){
+  let web3 = store.getState().web3.web3Instance
+  var candidateContractInstance;
+  candidateContractInstance=web3.eth.contract(candidateContract).at('0x8B74F1C1235f2dC2821338bcA739cD70306D394F')
+  const { getNumOfCandidates } = candidateContractInstance;
+  getNumOfCandidates((err,num)=>{
+    if(err) console.error('An error occured ::', err);
+    let numofcandidate=num.toNumber();
+    const { getCandidate } = candidateContractInstance;
+    for(let i=0;i<numofcandidate;i++){
+      getCandidate(i+1,(err,result) => {
+        if(err) console.error('An error occured ::', err);
+        //console.log(result);
+        console.log(web3.toUtf8(result[0]));
+        this.handleAddCandidate(web3.toUtf8(result[0]),web3.toUtf8(result[2]))
+      //  console.log(web3.toUtf8(result[1]));
+      //  console.log(web3.toUtf8(result[2]));
+
+      })
+
+    }
+  })
+
+}
 
   queryCandidateDetails (event){
       let web3 = store.getState().web3.web3Instance
@@ -75,44 +94,55 @@ class CandidateList extends Component {
 
   render(){
     return(
-      <main className="container">
-          <div className="pure-g">
-           <div className="pure-u-1-3"><p>&nbsp;</p></div>
-          </div>
-        <div className="pure-g">
+      <Segment placeholder>
+      <Grid columns={2} relaxed='very' stackable>
+      <Grid.Column>
+           <Form>
+                <h4>Candidates</h4>
+                {this.state.candidates.map((candidate,i) => (
+                  <Form.Field key={i}>
+                  <Label as='a' image>
+                     <img src='https://react.semantic-ui.com/images/avatar/small/joe.jpg' />
+                     {candidate.name}
+                   </Label>
+                   <Label>
+                   {candidate.party}
+                   </Label>
+                  </Form.Field>
+                ))}
+            </Form>
+      </Grid.Column>
 
 
 
-            <div className="pure-u-12-24"><h3>Candidate List</h3></div>
-            <div className="pure-u-12-24">
+      <Grid.Column verticalAlign='middle'>
               <h3>Candidate Search</h3>
-              <form className="pure-form" onSubmit={this.queryCandidateDetails}>
+              <Form className="pure-form" onSubmit={this.queryCandidateDetails}>
                 <fieldset>
                     <legend>Candidate Details</legend>
-                    <input type="text" placeholder="candidateid" name="candidateid" onChange={this.handleChange}/>
-                    <button type="submit" className="pure-button pure-button-primary">Search</button>
+                    <Input icon placeholder='Search...' name="candidateid" onChange={this.handleChange}>
+                      <input />
+                      <Icon name='search' />
+                    </Input>
+                    <Button type="submit" className="pure-button pure-button-primary">Search</Button>
                 </fieldset>
-            </form>
+            </Form>
             <p>
             <strong>Name</strong><br />
              {this.state.name}
            </p>
-
            <p>
              <strong>NIC</strong><br />
              {this.state.nic}
            </p>
-
-
            <p>
              <strong>Party</strong><br />
              {this.state.party}
            </p>
-            </div>
-
-
-        </div>
-      </main>
+          </Grid.Column>
+          </Grid>
+           <Divider vertical>Or</Divider>
+         </Segment>
     )
   }
 
