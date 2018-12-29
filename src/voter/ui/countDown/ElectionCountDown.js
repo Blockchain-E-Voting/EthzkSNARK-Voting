@@ -4,6 +4,7 @@ import Countdown from 'react-countdown-now';
 import { Image, Reveal } from "semantic-ui-react";
 import  ElectionForm  from '../electionForm/ElectionForm'
 import ProofForm from '../proof/ProofForm'
+import { VoterContract } from './../../../abi/voterContract'
 
 
 
@@ -13,9 +14,34 @@ class ElectionCountDown extends Component {
     super(props)
     this.handleProof=this.handleProof.bind(this)
     this.checkHash=this.checkHash.bind(this)
+    this.voted=this.voted.bind(this)
     this.state = {
           uistate:1,
       }
+
+  }
+
+  voted(){
+
+    this.web3 = store.getState().web3.web3Instance
+    //let voterContractInstance;
+    this.voterContractInstance=this.web3.eth.contract(VoterContract).at('0xE35fD0447c71c701b7157173c50c1778CcfdD822')
+
+    this.web3.eth.getCoinbase((error, coinbase) => {
+      // Log errors, if any.
+      if (error) {
+        console.error(error);
+      }
+
+      this.voterContractInstance.voted(coinbase, {from: coinbase},function(err,result){
+        // If no error, update user.
+          if(err){
+            console.log(err)
+          }
+
+      })
+
+    })
   }
 
   checkHash(){
@@ -203,15 +229,18 @@ var txhash
 
                //console.log(result2);
                that.setState({uistate:2})
+               that.voted()
              })
            //
          }else{
-           console.log("")
+           console.log("Not written to block")
          }
          });
 
 
 
+     }else{
+       console.log("transaction error")
      }
 
    });

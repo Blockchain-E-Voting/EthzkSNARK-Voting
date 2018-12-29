@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import VoterRegForm from '../../voter/ui/voterRegistration/VoterRegForm'
 import ElectionCountDown from '../../voter/ui/countDown/ElectionCountDown'
+import Results from '../../voter/ui/results/Results'
 import { Icon, Step, Grid, Message } from 'semantic-ui-react'
 import { VoterContract } from './../../abi/voterContract'
 import store from '../../store'
@@ -19,7 +20,8 @@ class Dashboard extends Component {
           to_be_added:'',
           deleted:'',
           verified:'',
-          accountstatus : ''
+          accountstatus : '',
+          voted : ''
       }
   }
 
@@ -32,7 +34,7 @@ class Dashboard extends Component {
  getuserData(event){
    let web3 = store.getState().web3.web3Instance
    var voterContractInstance;
-   voterContractInstance=web3.eth.contract(VoterContract).at('0x3Ac0981334cdc521bb88B8abf724995076a5Ec55')
+   voterContractInstance=web3.eth.contract(VoterContract).at('0xE35fD0447c71c701b7157173c50c1778CcfdD822')
    const voterID = this.props.authData.id
    const { getVoter } = voterContractInstance;
    getVoter(voterID,(err,result) => {
@@ -47,7 +49,8 @@ class Dashboard extends Component {
            to_be_added:result[5],
            deleted:result[6],
            verified:result[7],
-           temp_registered:result[8]
+           temp_registered:result[8],
+           voted:result[9]
 
        })
 
@@ -56,6 +59,12 @@ class Dashboard extends Component {
                  this.setState({
                    accountstatus:"Your Voting Account has been deleted. Meet the Grama Nildhari",
                    stage1:false, stage2:false,stage3:false,stage4:false,stage5:false
+                 });
+               }
+               else if( this.state.voted ){
+                 this.setState({
+                   accountstatus:"Your voting has been casted correctly. Wait for the results",
+                   stage1:false, stage2:false,stage3:false,stage4:false,stage5:true
                  });
                }
                else if (this.state.verified) {
@@ -105,6 +114,8 @@ class Dashboard extends Component {
      content=  <VoterRegForm/>
    }else if(this.state.stage4){
      content= <ElectionCountDown/>
+   }else if(this.state.stage5){
+     content= <Results/>
    }
 
     return(

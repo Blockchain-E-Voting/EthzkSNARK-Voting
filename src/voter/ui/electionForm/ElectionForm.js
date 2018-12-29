@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import store from '../../../store'
+import { browserHistory } from 'react-router'
 import { Image, Reveal,Grid, Button, Checkbox, Label, Form } from "semantic-ui-react";
 import { candidateContract } from './../../../candidate/ui/register/candidateContract'
 
@@ -19,7 +20,6 @@ class ElectionForm extends Component {
 
   handleFormSubmit(event){
     event.preventDefault()
-
 
    let web3 = store.getState().web3.web3Instance
  //  web3.eth.defaultAccount = "0x4432Ec4E9378F08E6fbacE81B168c461cffd6D47"
@@ -132,8 +132,12 @@ class ElectionForm extends Component {
     }
 
 
+
+
+
    })
 
+   return browserHistory.push('/dashboard')
 
   }
 

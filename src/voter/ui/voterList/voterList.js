@@ -28,6 +28,7 @@ class VoterList extends Component {
           to_be_added:'',
           deleted:'',
           verified:'',
+          voted:'',
           accountstatus:'',
           is_grid_visible:false
 
@@ -39,7 +40,7 @@ class VoterList extends Component {
 
      this.web3 = store.getState().web3.web3Instance
      //let voterContractInstance;
-     this.voterContractInstance=this.web3.eth.contract(VoterContract).at('0x3Ac0981334cdc521bb88B8abf724995076a5Ec55')
+     this.voterContractInstance=this.web3.eth.contract(VoterContract).at('0xE35fD0447c71c701b7157173c50c1778CcfdD822')
 
 
   }
@@ -93,11 +94,15 @@ class VoterList extends Component {
             to_be_added:result[5],
             deleted:result[6],
             verified:result[7],
-            temp_registered:result[8]
+            temp_registered:result[8],
+            voted:result[9]
         })
 
         if ( this.state.deleted ) {
           this.setState({accountstatus:"Account was deleted"});
+        }
+        else if(this.state.voted){
+          this.setState({accountstatus:"Voted"});
         }
         else if (this.state.verified) {
           this.setState({accountstatus:"Account was verified"});
