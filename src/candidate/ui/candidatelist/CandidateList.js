@@ -141,8 +141,8 @@ queryNumofCandidates (){
            </p>
           </Grid.Column>
           </Grid>
-           <Divider vertical>Or</Divider>
-         </Segment>
+          <Divider vertical>Or</Divider>
+        </Segment>
     )
   }
 
