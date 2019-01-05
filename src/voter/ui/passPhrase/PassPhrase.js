@@ -124,9 +124,11 @@ render(){
 
       return(
         <div>
+        <p>
         Since only you control your identity, You will need to save your security phrase.
         this security phrase will never saved in cloud storage. Screenshots are not secure you can make a safe backup
         with physical paper and a pen.
+        </p>
 
         Secret Phrase
         <Segment tertiary>
@@ -149,6 +151,9 @@ render(){
         --------------------------------------------------------------------------------------------------------------------
         </Segment>
 
+        <p>Download the arithmatic circuit and calculate the sha256 hash of the big Integer Representation</p>
+
+        <Button> Download Arithmatic circuit </Button>
         <Button onClick={this.toNextState}> Next</Button>
         </div>
 

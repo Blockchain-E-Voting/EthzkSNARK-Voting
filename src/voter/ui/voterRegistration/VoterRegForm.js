@@ -10,7 +10,7 @@ class VoterRegForm extends Component {
     super(props)
     this.handleChange=this.handleChange.bind(this)
     this.handleSubmit=this.handleSubmit.bind(this)
-  
+
   }
 
   handleChange(event){
@@ -27,7 +27,7 @@ class VoterRegForm extends Component {
 
    event.preventDefault()
 
-   if (this.state.secret !== this.state.resecret)
+   if (this.state.secret0 !== this.state.resecret0 || this.state.secret1 !== this.state.resecret1)
    {
      return alert('Secret Mismatch');
    }
@@ -36,7 +36,8 @@ class VoterRegForm extends Component {
    var voterContractInstance;
    const fullname = this.state.name;
    const nic = this.state.nic;
-   const secret = web3.sha3(this.state.secret);
+   const secret0 = this.state.secret0;
+   const secret1 = this.state.secret1;
    const voterCon = web3.eth.contract(VoterContract).at('0xE35fD0447c71c701b7157173c50c1778CcfdD822');
 
    web3.eth.getCoinbase((error, coinbase) => {
@@ -45,7 +46,7 @@ class VoterRegForm extends Component {
        console.error(error);
      }
      voterContractInstance=voterCon;
-     voterContractInstance.addVoter(fullname,nic,secret,{from: coinbase}, (error, txHash) => {
+     voterContractInstance.addVoter(fullname,nic,secret0,secret1,{from: coinbase}, (error, txHash) => {
        if (error) { throw error }
        console.log(txHash)
      });
@@ -68,8 +69,13 @@ class VoterRegForm extends Component {
           </Form.Group>
 
           <Form.Group widths="equal">
-              <Form.Input fluid  label="Secret" id="secret"  placeholder="Secret" onChange={this.handleChange}/>
-              <Form.Input fluid  label="Re Enter Secret" id="resecret"  placeholder="Re Enter Secret" onChange={this.handleChange}/>
+              <Form.Input fluid  label="Hash of Secret Phrase(out_0)" id="secret0"  placeholder="Secret0" onChange={this.handleChange}/>
+              <Form.Input fluid  label="Re Enter Secret Hash of Secret Phrase(out_0)" id="resecret0"  placeholder="Re Enter Secret" onChange={this.handleChange}/>
+          </Form.Group>
+
+          <Form.Group widths="equal">
+              <Form.Input fluid  label="Hash of Secret Phrase(out_1)" id="secret1"  placeholder="Secret1" onChange={this.handleChange}/>
+              <Form.Input fluid  label="Re Enter Secret Hash of Secret Phrase(out_1)" id="resecret1"  placeholder="Re Enter Secret" onChange={this.handleChange}/>
           </Form.Group>
 
 
