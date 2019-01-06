@@ -152,8 +152,9 @@ render(){
         </Segment>
 
         <p>Download the arithmatic circuit and calculate the sha256 hash of the big Integer Representation</p>
-
+        <a href='/sha256hashgenerate.code' download>
         <Button> Download Arithmatic circuit </Button>
+        </a>
         <Button onClick={this.toNextState}> Next</Button>
         </div>
 
