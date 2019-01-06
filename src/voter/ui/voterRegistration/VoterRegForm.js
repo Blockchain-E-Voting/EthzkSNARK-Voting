@@ -6,8 +6,9 @@ import { Form } from "semantic-ui-react";
 
 
 class VoterRegForm extends Component {
-  constructor(props) {
+  constructor(props,{ authData }) {
     super(props)
+    authData = this.props
     this.handleChange=this.handleChange.bind(this)
     this.handleSubmit=this.handleSubmit.bind(this)
 
@@ -38,13 +39,15 @@ class VoterRegForm extends Component {
    const nic = this.state.nic;
    const secret0 = this.state.secret0;
    const secret1 = this.state.secret1;
-   const voterCon = web3.eth.contract(VoterContract).at('0xE35fD0447c71c701b7157173c50c1778CcfdD822');
+   const voterCon = web3.eth.contract(VoterContract).at('0x61A298ef4F03a31824B320A4Fa42Dc86184DE3Be');
 
    web3.eth.getCoinbase((error, coinbase) => {
      // Log errors, if any.
      if (error) {
        console.error(error);
      }
+
+
      voterContractInstance=voterCon;
      voterContractInstance.addVoter(fullname,nic,secret0,secret1,{from: coinbase}, (error, txHash) => {
        if (error) { throw error }

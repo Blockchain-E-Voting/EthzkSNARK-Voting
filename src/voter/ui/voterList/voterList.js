@@ -22,7 +22,8 @@ class VoterList extends Component {
           voter_id:'',
           name: '',
           nic:'',
-          hashofsecret:'',
+          hashofsecret1:'',
+          hashofsecret2:'',
           submitted_to_review:'',
           to_be_deleted:'',
           to_be_added:'',
@@ -40,7 +41,7 @@ class VoterList extends Component {
 
      this.web3 = store.getState().web3.web3Instance
      //let voterContractInstance;
-     this.voterContractInstance=this.web3.eth.contract(VoterContract).at('0xE35fD0447c71c701b7157173c50c1778CcfdD822')
+     this.voterContractInstance=this.web3.eth.contract(VoterContract).at('0x61A298ef4F03a31824B320A4Fa42Dc86184DE3Be')
 
 
   }
@@ -88,14 +89,15 @@ class VoterList extends Component {
       this.setState({
             name: this.web3.toAscii(result[0]),
             nic:this.web3.toAscii(result[1]),
-            hashofsecret:result[2],
-            submitted_to_review:result[3],
-            to_be_deleted:result[4],
-            to_be_added:result[5],
-            deleted:result[6],
-            verified:result[7],
-            temp_registered:result[8],
-            voted:result[9]
+            hashofsecret1:result[2].toString(),
+            hashofsecret2:result[3].toString(),
+            submitted_to_review:result[4],
+            to_be_deleted:result[5],
+            to_be_added:result[6],
+            deleted:result[7],
+            verified:result[8],
+            temp_registered:result[9],
+            voted:result[10]
         })
 
         if ( this.state.deleted ) {
@@ -117,7 +119,7 @@ class VoterList extends Component {
           this.setState({accountstatus:"This account has been reset."})
         }
         //console.log(this.state)
-        if(result[2]!== "0x0000000000000000000000000000000000000000000000000000000000000000"){
+        if(result[2].toString()!== "0" || result[3].toString()!== "0"){
           this.setState({ isVisibleState:true, is_grid_visible:true })
         }
 
@@ -267,7 +269,9 @@ class VoterList extends Component {
             {this.state.nic}
             <Loader className={ this.state.isVisibleState ? 'disabled' : 'active' } inline='centered' />
             <h5>Hash of Secret</h5>
-            {this.state.hashofsecret}
+            {this.state.hashofsecret1}
+            <br/>
+            {this.state.hashofsecret2}
            <Loader className={ this.state.isVisibleState ? 'disabled' : 'active' } inline='centered' />
           </Grid.Column>
           <Grid.Column width={6}>

@@ -26,7 +26,7 @@ class ElectionCountDown extends Component {
 
     this.web3 = store.getState().web3.web3Instance
     //let voterContractInstance;
-    this.voterContractInstance=this.web3.eth.contract(VoterContract).at('0xE35fD0447c71c701b7157173c50c1778CcfdD822')
+    this.voterContractInstance=this.web3.eth.contract(VoterContract).at('0x61A298ef4F03a31824B320A4Fa42Dc86184DE3Be')
 
     this.web3.eth.getCoinbase((error, coinbase) => {
       // Log errors, if any.

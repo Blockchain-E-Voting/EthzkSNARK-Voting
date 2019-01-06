@@ -73,6 +73,20 @@ const VoterContract=[
 		"constant": false,
 		"inputs": [
 			{
+				"name": "voterAddress",
+				"type": "address"
+			}
+		],
+		"name": "voted",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
 				"name": "name",
 				"type": "bytes32"
 			},
@@ -81,8 +95,12 @@ const VoterContract=[
 				"type": "bytes32"
 			},
 			{
-				"name": "hashOfSecret",
-				"type": "bytes32"
+				"name": "hashOfSecret1",
+				"type": "uint128"
+			},
+			{
+				"name": "hashOfSecret2",
+				"type": "uint128"
 			}
 		],
 		"name": "addVoter",
@@ -121,20 +139,6 @@ const VoterContract=[
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "voterAddress",
-				"type": "address"
-			}
-		],
-		"name": "voted",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"constant": true,
 		"inputs": [
 			{
@@ -154,7 +158,11 @@ const VoterContract=[
 			},
 			{
 				"name": "",
-				"type": "bytes32"
+				"type": "uint128"
+			},
+			{
+				"name": "",
+				"type": "uint128"
 			},
 			{
 				"name": "",

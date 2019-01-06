@@ -5,8 +5,8 @@ contract Voter{
     struct VoterDetails {
         bytes32 name;
         bytes32 nic;
-        bytes32 hashOfSecret1;
-        bytes32 hashOfSecret2;
+        uint128 hashOfSecret1;
+        uint128 hashOfSecret2;
         bool submitted_to_review;
         bool to_be_deleted;
         bool to_be_added;
@@ -25,7 +25,7 @@ contract Voter{
     }
 
     //this should be updated by the applicant
-    function addVoter(bytes32 name, bytes32 nic, bytes32 hashOfSecret1,bytes32 hashOfSecret2) public returns(bool,bool,bool,bool,bool,bool,bool) {
+    function addVoter(bytes32 name, bytes32 nic, uint128 hashOfSecret1,uint128 hashOfSecret2) public returns(bool,bool,bool,bool,bool,bool,bool) {
        //if user doesn't exist
        if(voters[msg.sender].name==0x0){
          voters[msg.sender] = VoterDetails(name,nic,hashOfSecret1,hashOfSecret2,false,false,false,false,false,false,false);
@@ -42,7 +42,7 @@ contract Voter{
     }
 
     //query specific voter details
-      function getVoter(address voterId) public view returns (bytes32,bytes32,bytes32,bytes32,bool,bool,bool,bool,bool,bool,bool) {
+      function getVoter(address voterId) public view returns (bytes32,bytes32,uint128,uint128,bool,bool,bool,bool,bool,bool,bool) {
         VoterDetails memory v = voters[voterId];
         return (v.name,v.nic,v.hashOfSecret1,v.hashOfSecret2,v.submitted_to_review,v.to_be_deleted,v.to_be_added,v.deleted,v.verified,v.temp_registered,v.voted);
      }
@@ -92,7 +92,7 @@ contract Voter{
       voters[voterAddress].deleted=false;
       voters[voterAddress].verified=false;
       voters[voterAddress].temp_registered=true;
-      voters[voterAddress].voted=false
+      voters[voterAddress].voted=false;
     }
 
 
