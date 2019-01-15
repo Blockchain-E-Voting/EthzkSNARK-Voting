@@ -25,6 +25,7 @@ class Dashboard extends Component {
           accountstatus : '',
           voted : ''
       }
+    this.changeuistage2 = this.changeuistage2.bind(this);
   }
 
   componentDidMount() {
@@ -108,13 +109,23 @@ class Dashboard extends Component {
  }
 
 
+ changeuistage2(){
+   this.setState({
+     accountstatus:"Your request was submitted to review and It is pending at Grama Niladhari. Please prepare the valid documents. ex: NIC, Birth Certificate etc.",
+     stage1:false, stage2:true,stage3:false,stage4:false,stage5:false
+   });
+ }
+
+
 
   render() {
 
    // console.log(this.props.authData);
    let content;
    if(this.state.stage1){
-     content=  <RegistrationLayout/>
+     content=  <RegistrationLayout onClicktoGrama={this.changeuistage2}/>
+   }else if(this.state.stage2){
+     content = '';
    }else if(this.state.stage4){
      content= <ElectionCountDown/>
    }else if(this.state.stage5){

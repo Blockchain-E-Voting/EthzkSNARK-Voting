@@ -5,12 +5,14 @@ import { Form } from "semantic-ui-react";
 
 
 
+
 class VoterRegForm extends Component {
   constructor(props,{ authData }) {
     super(props)
     authData = this.props
     this.handleChange=this.handleChange.bind(this)
     this.handleSubmit=this.handleSubmit.bind(this)
+    this.getTransactionReceiptMined=this.getTransactionReceiptMined.bind(this);
 
   }
 
@@ -24,13 +26,43 @@ class VoterRegForm extends Component {
      });
  }
 
+getTransactionReceiptMined = function getTransactionReceiptMined(txHash, interval) {
+    const self = this;
+     let web3 = store.getState().web3.web3Instance;
+    const transactionReceiptAsync = function(resolve, reject) {
+        web3.eth.getTransactionReceipt(txHash, (error, receipt) => {
+            if (error) {
+                reject(error);
+            } else if (receipt == null) {
+                setTimeout(
+                    () => transactionReceiptAsync(resolve, reject),
+                    interval ? interval : 500);
+            } else {
+                resolve(receipt);
+            }
+        });
+    };
+
+    if (Array.isArray(txHash)) {
+        return Promise.all(txHash.map(
+            oneTxHash => self.getTransactionReceiptMined(oneTxHash, interval)));
+    } else if (typeof txHash === "string") {
+        return new Promise(transactionReceiptAsync);
+    } else {
+        throw new Error("Invalid Type: " + txHash);
+    }
+};
+
  handleSubmit(event){
 
    event.preventDefault()
+   var that = this;
 
    if (this.state.secret0 !== this.state.resecret0 || this.state.secret1 !== this.state.resecret1)
    {
      return alert('Secret Mismatch');
+   }else if(this.state.secret0 == null ||  this.state.resecret0 == null || this.state.secret1 == null || this.state.resecret1 == null){
+     return alert('Secret Phrase can not be null');
    }
 
    let web3 = store.getState().web3.web3Instance;
@@ -41,6 +73,8 @@ class VoterRegForm extends Component {
    const secret1 = this.state.secret1;
    const voterCon = web3.eth.contract(VoterContract).at('0x61A298ef4F03a31824B320A4Fa42Dc86184DE3Be');
 
+
+   var txhash;
    web3.eth.getCoinbase((error, coinbase) => {
      // Log errors, if any.
      if (error) {
@@ -51,7 +85,14 @@ class VoterRegForm extends Component {
      voterContractInstance=voterCon;
      voterContractInstance.addVoter(fullname,nic,secret0,secret1,{from: coinbase}, (error, txHash) => {
        if (error) { throw error }
-       console.log(txHash)
+      // console.log(txHash)
+      txhash = txHash;
+      return this.getTransactionReceiptMined(txhash).then(function (receipt) {
+          if(receipt.status = '0x1'){
+            that.props.onClickNextUi();
+          }
+        });
+
      });
 
    });

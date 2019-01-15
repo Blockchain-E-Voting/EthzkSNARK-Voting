@@ -53,7 +53,7 @@ render(){
   }else if(this.state.uistate==2){
     regcontent=<PassPhrase onClickNext={this.changeuistateto3}/>
   }else if(this.state.uistate==3){
-    regcontent=<VoterRegForm/>
+    regcontent=<VoterRegForm onClickNextUi={this.props.onClicktoGrama}/>
   }
 
 
