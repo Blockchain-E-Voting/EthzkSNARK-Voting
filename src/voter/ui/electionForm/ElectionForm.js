@@ -210,7 +210,7 @@ render(){
                <img src='https://react.semantic-ui.com/images/avatar/small/joe.jpg' />
                {candidate.name}
              </Label>
-              <Checkbox label={candidate.No} onChange={() => this.toggleCheckbox(candidate.No)}/>
+              <Checkbox label={"x"+candidate.No} onChange={() => this.toggleCheckbox(candidate.No)}/>
 
             </Form.Field>
           ))}

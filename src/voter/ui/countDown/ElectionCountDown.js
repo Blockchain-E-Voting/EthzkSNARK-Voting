@@ -17,7 +17,9 @@ class ElectionCountDown extends Component {
     this.voted=this.voted.bind(this)
     this.state = {
           uistate:1,
+          zkProof:''
       }
+
 
   }
 
@@ -47,6 +49,8 @@ class ElectionCountDown extends Component {
 
 
   checkHash(){
+    var zknproof=JSON.parse(this.state.zkProof);
+    console.log(zknproof)
     var that = this;
   let web3 = store.getState().web3.web3Instance
 //  web3.eth.defaultAccount = "0x4432Ec4E9378F08E6fbacE81B168c461cffd6D47"
@@ -190,21 +194,18 @@ class ElectionCountDown extends Component {
 		"type": "event"
 	}
 ]
-  hashcontractInstance = web3.eth.contract(abi).at('0x2c32d696B175802fb6aF410875C6935B7E439A9c')
+  hashcontractInstance = web3.eth.contract(abi).at('0x3e8012DD6e54D42BB386eeB83375a53bB47B067D')
 
   var I = ["1"]
 
-
-  var A = ["0x2f6a568985b4b6c879780b454ab1ab5d5c2b9ff8fbe0dbcac29e18b333d2db65", "0x152edca682582683410a8e06ca99bca32a466cb210f2fcdac8cacc0b3bc07fa6"]
-  var A_p = ["0x24ba60e4da990fa5316c26431379f391544d6eff7d6978a518e02a1dbd388a9d", "0x1c41f06294dce2c445a7a7a0c1c8b79b9214ef069061b42cc594bddd178cd645"]
-  var B = [["0x9f5a2850efffa29f833527b4cc28cf385bc08b36d3c18e5a0aac583e517eb15", "0xd0f7c0a117a9c86e7a7063d5172c7e8c198cad7dd5292b56d06f16f96c06067"], ["0x216b16f387e3093f35a1e3e366a6e78b025189e7bdbb1a801282c8e5b5b6a2ea", "0x25ea4d278118362dd1683f21b2f299b42ac59a1bcd76476f7bd6d9a145e8b856"]]
-  var B_p = ["0x2492b12772269abdd3b146e6ba805963b97db6acde1fec0a1d0e842b4688e866", "0x18f99452069d75bf61c304954f8d34063bd80d613cc1b2ecabe6bc9b4282e33"]
-  var C = ["0x230a0b17b211c4f338895640264778dcecb8dfeccaa58b6849fe56b7897a376f", "0x2cba59f9fb37fccb17e7441cdba787b841a65ac17edcb1fc19ca68ea8eabb380"]
-  var C_p = ["0x210b4b47c7b3cffe40d64b2bc759218008d102a5f361fe987b5e7c281d294097", "0x3053732fc5b3028e2295a3a920536c4665e54b0755b9c82d44b1ac0b5392108b"]
-  var H = ["0x22b8cb4166a4b37638e93b6b7e1ce3c113364f0298c97e9bc83ef66ff1bd2074", "0x29c062865e212ed6ddb71c8265bf47848491cd6fe6ed569297fab9d5b3bd635"]
-  var K = ["0x1e2abcfacfee992d0c7a7cda315662c7b947ba1bd867208acf26d276002c296e", "0x23af9abecd494c8b35847912af1b7e0a132c67aec6968cef94f1ea4e3d70974"]
-
-
+var A = zknproof.proof.A;
+var A_p = zknproof.proof.A_p;
+var B = zknproof.proof.B;
+var B_p = zknproof.proof.B_p;
+var C = zknproof.proof.C;
+var C_p = zknproof.proof.C_p;
+var H = zknproof.proof.H;
+var K = zknproof.proof.K;
 
 var txhash
  const { sha256hashTest } = hashcontractInstance
@@ -230,7 +231,7 @@ var txhash
                if(err) console.error('An error occured ::', err);
 
                console.log(result2);
-               that.setState({uistate:2})
+              that.setState({uistate:2})
                that.voted()
              })
            //
@@ -258,8 +259,13 @@ var txhash
 }
 
 
-  handleProof(){
-    this.checkHash()
+  handleProof(data){
+  //  console.log(data);
+    this.setState({ zkProof: data }, () => {
+      //console.log(this.state.jsonFile);
+      this.checkHash();
+    });
+
 
   }
 
