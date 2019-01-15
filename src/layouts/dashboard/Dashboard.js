@@ -26,6 +26,7 @@ class Dashboard extends Component {
           voted : ''
       }
     this.changeuistage2 = this.changeuistage2.bind(this);
+    this.changeuistage5 = this.changeuistage5.bind(this);
   }
 
   componentDidMount() {
@@ -116,7 +117,13 @@ class Dashboard extends Component {
    });
  }
 
+ changeuistage5(){
+   this.setState({
+     accountstatus:"Your voting has been casted correctly. Wait for the results",
+     stage1:false, stage2:false,stage3:false,stage4:false,stage5:true
+   });
 
+ }
 
   render() {
 
@@ -127,7 +134,7 @@ class Dashboard extends Component {
    }else if(this.state.stage2){
      content = '';
    }else if(this.state.stage4){
-     content= <ElectionCountDown/>
+     content= <ElectionCountDown changeToResultUi={this.changeuistage5}/>
    }else if(this.state.stage5){
      content= <ResultCountDown/>
    }

@@ -20,6 +20,7 @@ class ElectionForm extends Component {
 
   handleFormSubmit(event){
     event.preventDefault()
+    var that = this;
 
    let web3 = store.getState().web3.web3Instance
  //  web3.eth.defaultAccount = "0x4432Ec4E9378F08E6fbacE81B168c461cffd6D47"
@@ -127,6 +128,7 @@ class ElectionForm extends Component {
      for (const checkbox of this.selectedCheckboxes) {
        voteForCandidate(checkbox,{from: coinbase},(err,result) => {
          if(err) console.error('An error occured ::', err);
+         that.props.changetoNextUi();
 
        })
     }

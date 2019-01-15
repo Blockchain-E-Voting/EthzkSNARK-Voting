@@ -25,6 +25,7 @@ class ElectionCountDown extends Component {
 
 
   voted(){
+    var that = this;
 
     this.web3 = store.getState().web3.web3Instance
     //let voterContractInstance;
@@ -41,6 +42,8 @@ class ElectionCountDown extends Component {
           if(err){
             console.log(err)
           }
+
+          that.setState({uistate:2})
 
       })
 
@@ -231,7 +234,7 @@ var txhash
                if(err) console.error('An error occured ::', err);
 
                console.log(result2);
-              that.setState({uistate:2})
+
                that.voted()
              })
            //
@@ -277,7 +280,7 @@ render(){
     // Render a complete state
     return <ProofForm onSubmitProofForm={this.handleProof} />;
   }else if(this.state.uistate==2){
-    return <ElectionForm />
+    return <ElectionForm changetoNextUi={this.props.changeToResultUi} />
   } else {
     // Render a countdown
     return <span>{hours}:{minutes}:{seconds}</span>;
