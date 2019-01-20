@@ -3,6 +3,7 @@ import store from '../../../store'
 import { Grid, Segment, Label, Form} from 'semantic-ui-react'
 import { candidateContract } from '../../../candidate/ui/register/candidateContract'
 import { ElectionContract } from '../../../abi/ElectionContract'
+import { Chart } from 'react-charts'
 
 class Results extends Component {
 
@@ -26,11 +27,14 @@ class Results extends Component {
  }
 
  handleAddCandidate = (candidateName,party,votesreceived) => {
-  this.setState({ candidates: this.state.candidates.concat([{ name: candidateName, party: party,votes: votesreceived }]) });
+   this.setState({ candidates: this.state.candidates.concat([{ name: candidateName, party: party,votes: votesreceived }]) });
  }
 
- handleVotes = (votesreceived) => {
-   this.setState({ votes: this.state.votes.concat([{ votecount:votesreceived }])});
+ handleVotes = (candidatename,votesreceived) => {
+   this.setState({
+      votes: this.state.votes.concat([[candidatename, votesreceived]])
+    })
+   //this.setState({ votes: this.state.votes.concat([{name:candidatename, votecount:votesreceived }])});
  }
 
 
@@ -57,7 +61,7 @@ queryNumofCandidates (){
           //get results for valid candidate
           totalVotesFor(i+1,(err,res) => {
              if(err) console.error('An error occured ::', err);
-            // this.handleVotes(result.toNumber())
+           this.handleVotes(web3.toUtf8(result[0]),res.toNumber())
             this.handleAddCandidate(web3.toUtf8(result[0]),web3.toUtf8(result[2]),res.toNumber())
 
 
@@ -75,6 +79,8 @@ queryNumofCandidates (){
 
 render(){
 
+  var votedata = this.state.votes
+  console.log(votedata)
   return(
 
     <Segment placeholder>
@@ -97,6 +103,30 @@ render(){
                     </Form.Field>
                   ))}
               </Form>
+        </Grid.Column>
+        <div
+          style={{
+            width: "400px",
+            height: "400px"
+          }}
+          >
+          <Chart
+            data={[
+              {
+                label: "voter 1",
+                data: votedata
+              }
+
+            ]}
+            series={{ type: 'bar' }}
+            axes={[
+              { primary: true, type: "ordinal", position: "bottom" },
+              { type: "linear", position: "left" ,stacked:true}
+            ]}
+          />
+          </div>
+        <Grid.Column>
+
         </Grid.Column>
 
       </Grid>
