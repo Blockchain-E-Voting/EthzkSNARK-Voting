@@ -39,6 +39,14 @@ render(){
   return(
 
 <div>
+
+  <a href='/sha256hashgenerate.code' download>
+  <Button> Download Arithmatic circuit </Button>
+  </a>
+  <a href='/sha256hashgenerate.code' download>
+  <Button> Download Proving Key </Button>
+  </a>
+<br/><br/>
 <div className="files">
         <Files
 
@@ -54,7 +62,7 @@ render(){
 
           <Header icon>
             <Icon name='file code' />
-            Drop files here or click to upload
+            Drop Proof file here or click to upload
           </Header>
 
         </Segment>

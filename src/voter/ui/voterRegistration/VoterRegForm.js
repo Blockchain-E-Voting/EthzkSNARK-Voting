@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import store from '../../../store'
 import { VoterContract } from './../../../abi/voterContract'
-import { Form } from "semantic-ui-react";
+import { Form, Loader, Dimmer, Image } from "semantic-ui-react";
 
 
 
@@ -13,6 +13,7 @@ class VoterRegForm extends Component {
     this.handleChange=this.handleChange.bind(this)
     this.handleSubmit=this.handleSubmit.bind(this)
     this.getTransactionReceiptMined=this.getTransactionReceiptMined.bind(this);
+    this.state = { loaderstate: false}
 
   }
 
@@ -81,7 +82,7 @@ getTransactionReceiptMined = function getTransactionReceiptMined(txHash, interva
        console.error(error);
      }
 
-
+     that.setState({ loaderstate: true}) 
      voterContractInstance=voterCon;
      voterContractInstance.addVoter(fullname,nic,secret0,secret1,{from: coinbase}, (error, txHash) => {
        if (error) { throw error }
@@ -89,6 +90,7 @@ getTransactionReceiptMined = function getTransactionReceiptMined(txHash, interva
       txhash = txHash;
       return this.getTransactionReceiptMined(txhash).then(function (receipt) {
           if(receipt.status = '0x1'){
+            that.setState = { loaderstate: false}
             that.props.onClickNextUi();
           }
         });
@@ -104,9 +106,15 @@ getTransactionReceiptMined = function getTransactionReceiptMined(txHash, interva
 
   render() {
 
+
     return(
       <div>
-        <Form onSubmit={this.handleSubmit.bind(this)}>
+
+        <Form onSubmit={this.handleSubmit.bind(this)} >
+        <Dimmer active={this.state.loaderstate}  inverted>
+         <Loader inverted />
+         </Dimmer>
+
           <Form.Group widths="equal">
           <Form.Input fluid  label="First name" id="name"  placeholder="Full Name"  onChange={this.handleChange}/>
           <Form.Input fluid  label="NIC" id="nic"  placeholder="NIC No" onChange={this.handleChange}/>

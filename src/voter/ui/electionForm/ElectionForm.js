@@ -118,7 +118,7 @@ class ElectionForm extends Component {
 	}
 ]
 
-   ElectioncontractInstance = web3.eth.contract(abi).at('0x1716ce1d1A782A1591152156fE978F4aFe6878FD')
+   ElectioncontractInstance = web3.eth.contract(abi).at('0xB0110635A904588BaCC1DA6Ac1c8dd651f323864')
    const { voteForCandidate } = ElectioncontractInstance
 
    web3.eth.getCoinbase((error, coinbase) => {

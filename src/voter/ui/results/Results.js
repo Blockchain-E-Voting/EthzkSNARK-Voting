@@ -39,7 +39,7 @@ queryNumofCandidates (){
  var candidateContractInstance;
  var ElectioncontractInstance
  candidateContractInstance=web3.eth.contract(candidateContract).at('0x8B74F1C1235f2dC2821338bcA739cD70306D394F')
- ElectioncontractInstance = web3.eth.contract(ElectionContract).at('0x1716ce1d1A782A1591152156fE978F4aFe6878FD')
+ ElectioncontractInstance = web3.eth.contract(ElectionContract).at('0xB0110635A904588BaCC1DA6Ac1c8dd651f323864')
  const { getNumOfCandidates } = candidateContractInstance;
  const { totalVotesFor } = ElectioncontractInstance;
  getNumOfCandidates((err,num)=>{

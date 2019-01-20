@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { VoterContract } from './../../../abi/voterContract'
 import store from '../../../store'
-import { Form,Input,Grid,Icon,Card,Image, Loader,Button } from "semantic-ui-react";
+import { Form,Input,Grid,Icon,Card,Image, Loader,Button, Container } from "semantic-ui-react";
 
 class VoterList extends Component {
 
@@ -226,19 +226,23 @@ class VoterList extends Component {
 
     return(
       <div>
+      <Container>
+        <Grid>
+          <Grid.Row centered>
+            <Grid.Column width={6}>
+          <Form>
+            <Form.Group widths="equal">
+                <Input focus label="voter id" placeholder='Search...' name="voterid" onChange={this.handleChange}/>
+            </Form.Group>
+            <Form.Group inline>
+                <Form.Button onClick={this.queryVoterDetails.bind(this)} primary>Search</Form.Button>
+                <Form.Button onClick={this.clearGrid.bind(this)}>Reset</Form.Button>
+              </Form.Group>
+         </Form>
+             </Grid.Column>
+         </Grid.Row>
+     </Grid>
 
-    <Form>
-      <Form.Group widths="equal">
-          <Input focus label="voter id" placeholder='Search...' name="voterid" onChange={this.handleChange}/>
-      </Form.Group>
-      <Form.Group inline>
-          <Form.Button onClick={this.queryVoterDetails.bind(this)} primary>Search</Form.Button>
-          <Form.Button onClick={this.clearGrid.bind(this)}>Reset</Form.Button>
-        </Form.Group>
-   </Form>
-
-
-      <br/><br/>
       <Grid celled className={this.state.is_grid_visible? "visible" : "hidden"}>
         <Grid.Row>
           <Grid.Column width={3}>
@@ -283,17 +287,18 @@ class VoterList extends Component {
              </Form.Field>
             </Form>
             <br/>
-            <Button positive onClick={this.to_be_added_list}>To be Added List</Button>
-             <Button negative onClick={this.to_be_deleted_list}>To be Deleted List</Button>
+            <Button  onClick={this.to_be_added_list}>To be Accepted List</Button>
+             <Button onClick={this.to_be_deleted_list}>To be Rejected List</Button>
              <br/><br/><br/>
-             <Button positive onClick={this.deleteVoter}>Delete</Button>
-              <Button negative onClick={this.verifyVoter}>Verify</Button>
-              <Button negative onClick={this.resetVoter}>Reset</Button>
+             <Button onClick={this.deleteVoter}>Reject</Button>
+              <Button onClick={this.verifyVoter}>Accept</Button>
+              <Button  onClick={this.resetVoter}>Reset</Button>
               <br/><br/><br/>
                 <Button primary>View Documents</Button>
           </Grid.Column>
         </Grid.Row>
       </Grid>
+        </Container>
       </div>
     )
   }
