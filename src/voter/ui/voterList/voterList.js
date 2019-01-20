@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { VoterContract } from './../../../abi/voterContract'
 import store from '../../../store'
-import { Form,Input,Grid,Icon,Card,Image, Loader,Button, Container } from "semantic-ui-react";
+import { Form,Input,Grid,Icon,Card,Image, Loader,Button, Container, Dimmer, Message } from "semantic-ui-react";
 
 class VoterList extends Component {
 
@@ -9,6 +9,7 @@ class VoterList extends Component {
   constructor(props, { authData }) {
     super(props)
     authData = this.props
+    this.getTransactionReceiptMined=this.getTransactionReceiptMined.bind(this)
     this.queryNumofVoters=this.queryNumofVoters.bind(this)
     this.queryVoterDetails=this.queryVoterDetails.bind(this)
     this.handleChange=this.handleChange.bind(this)
@@ -17,6 +18,7 @@ class VoterList extends Component {
     this.deleteVoter=this.deleteVoter.bind(this)
     this.verifyVoter=this.verifyVoter.bind(this)
     this.resetVoter=this.resetVoter.bind(this)
+
 
     this.state = {
           voter_id:'',
@@ -31,7 +33,11 @@ class VoterList extends Component {
           verified:'',
           voted:'',
           accountstatus:'',
-          is_grid_visible:false
+          is_grid_visible:false,
+          loaderstate:false,
+          is_resetmessage_visible:false,
+          is_acceptmessage_visible:false,
+          is_tobeacceptmessage_visible:false
 
       }
 
@@ -50,6 +56,33 @@ class VoterList extends Component {
    this.queryNumofVoters();
    this.queryVoterDetails();
  }
+
+ getTransactionReceiptMined = function getTransactionReceiptMined(txHash, interval) {
+     const self = this;
+      let web3 = store.getState().web3.web3Instance;
+     const transactionReceiptAsync = function(resolve, reject) {
+         web3.eth.getTransactionReceipt(txHash, (error, receipt) => {
+             if (error) {
+                 reject(error);
+             } else if (receipt == null) {
+                 setTimeout(
+                     () => transactionReceiptAsync(resolve, reject),
+                     interval ? interval : 500);
+             } else {
+                 resolve(receipt);
+             }
+         });
+     };
+
+     if (Array.isArray(txHash)) {
+         return Promise.all(txHash.map(
+             oneTxHash => self.getTransactionReceiptMined(oneTxHash, interval)));
+     } else if (typeof txHash === "string") {
+         return new Promise(transactionReceiptAsync);
+     } else {
+         throw new Error("Invalid Type: " + txHash);
+     }
+ };
 
 
  handleChange(event) {
@@ -74,57 +107,52 @@ class VoterList extends Component {
 
   clearGrid(event){
     this.setState({ is_grid_visible:false });
+    this.setState({is_resetmessage_visible:false, is_acceptmessage_visible:false, is_tobeacceptmessage_visible:false});
   }
 
   queryVoterDetails (event){
-
+    this.setState({is_resetmessage_visible:false, is_acceptmessage_visible:false, is_tobeacceptmessage_visible:false});
     const voterID = this.state.voterid;
     const { getVoter } = this.voterContractInstance;
     getVoter(voterID,(err,result) => {
       if(err) console.error('An error occured ::', err);
       // console.log(web3.toUtf8(result[3]));
-      // console.log(web3.toUtf8(result[1]));
-      // console.log(web3.toUtf8(result[2]));
-
       this.setState({
-            name: this.web3.toAscii(result[0]),
-            nic:this.web3.toAscii(result[1]),
-            hashofsecret1:result[2].toString(),
-            hashofsecret2:result[3].toString(),
-            submitted_to_review:result[4],
-            to_be_deleted:result[5],
-            to_be_added:result[6],
-            deleted:result[7],
-            verified:result[8],
-            temp_registered:result[9],
-            voted:result[10]
-        })
+           name: this.web3.toAscii(result[0]),
+           nic:this.web3.toAscii(result[1]),
+           hashofsecret1:result[2].toString(),
+           hashofsecret2:result[3].toString(),
+           submitted_to_review:result[4],
+           to_be_deleted:result[5],
+           to_be_added:result[6],
+           deleted:result[7],
+           verified:result[8],
+           temp_registered:result[9],
+           voted:result[10]
+       })
 
-        if ( this.state.deleted ) {
-          this.setState({accountstatus:"Account was deleted"});
-        }
-        else if(this.state.voted){
-          this.setState({accountstatus:"Voted"});
-        }
-        else if (this.state.verified) {
-          this.setState({accountstatus:"Account was verified"});
-        }
-        else if (this.state.to_be_deleted || this.state.to_be_added) {
-          this.setState({accountstatus:"submitted to review. Pending at District office"});
-        }
-        else if(this.state.submitted_to_review){
-          this.setState({accountstatus:"submitted to review. Pending at grama Niladhari"});
-        }
-        else if(this.state.temp_registered){
-          this.setState({accountstatus:"This account has been reset."})
-        }
-        //console.log(this.state)
-        if(result[2].toString()!== "0" || result[3].toString()!== "0"){
-          this.setState({ isVisibleState:true, is_grid_visible:true })
-        }
-
-
-
+       if ( this.state.deleted ) {
+         this.setState({accountstatus:"Account was deleted"});
+       }
+       else if(this.state.voted){
+         this.setState({accountstatus:"Voted"});
+       }
+       else if (this.state.verified) {
+         this.setState({accountstatus:"Account was verified"});
+       }
+       else if (this.state.to_be_deleted || this.state.to_be_added) {
+         this.setState({accountstatus:"submitted to review. Pending at District office"});
+       }
+       else if(this.state.submitted_to_review){
+         this.setState({accountstatus:"submitted to review. Pending at grama Niladhari"});
+       }
+       else if(this.state.temp_registered){
+         this.setState({accountstatus:"This account has been reset."})
+       }
+       //console.log(this.state)
+       if(result[2].toString()!== "0" || result[3].toString()!== "0"){
+         this.setState({ isVisibleState:true, is_grid_visible:true })
+       }
 
     })
     //event.preventDefault()
@@ -132,17 +160,31 @@ class VoterList extends Component {
 
 
   to_be_added_list(){
+    var txhash;
+    var that = this;
     this.web3.eth.getCoinbase((error, coinbase) => {
       // Log errors, if any.
       if (error) {
         console.error(error);
       }
 
+      that.setState({ loaderstate: true});
+
       this.voterContractInstance.toBeAdded(this.state.voterid, {from: coinbase},function(err,result){
         // If no error, update user.
           if(err){
             console.log(err)
           }
+          txhash = result;
+          return that.getTransactionReceiptMined(txhash).then(function (receipt) {
+          //  console.log(receipt.status);
+              if(receipt.status = '0x1'){
+                that.setState({ loaderstate: false})
+                that.clearGrid()
+                that.setState({is_tobeacceptmessage_visible: true})
+
+              }
+            });
 
       })
 
@@ -187,11 +229,14 @@ class VoterList extends Component {
   }
 
   verifyVoter(){
+    var txhash;
+    var that = this;
     this.web3.eth.getCoinbase((error, coinbase) => {
       // Log errors, if any.
       if (error) {
         console.error(error);
       }
+        that.setState({ loaderstate: true })
 
       this.voterContractInstance.verified(this.state.voterid, {from: coinbase},function(err,result){
         // If no error, update user.
@@ -199,23 +244,49 @@ class VoterList extends Component {
             console.log(err)
           }
 
+          txhash= result;
+
+          return that.getTransactionReceiptMined(txhash).then(function (receipt) {
+          //  console.log(receipt.status);
+              if(receipt.status = '0x1'){
+                that.setState({ loaderstate: false})
+                that.clearGrid()
+                that.setState({is_acceptmessage_visible: true})
+
+              }
+            });
+
       })
 
     })
   }
 
   resetVoter(){
+    var txhash;
+    var that = this
     this.web3.eth.getCoinbase((error, coinbase) => {
       // Log errors, if any.
       if (error) {
         console.error(error);
       }
+      that.setState({ loaderstate: true})
 
       this.voterContractInstance.reset(this.state.voterid, {from: coinbase},function(err,result){
         // If no error, update user.
           if(err){
             console.log(err)
           }
+          txhash = result;
+
+          return that.getTransactionReceiptMined(txhash).then(function (receipt) {
+          //  console.log(receipt.status);
+              if(receipt.status = '0x1'){
+                that.setState({ loaderstate: false})
+                that.clearGrid()
+                that.setState({is_resetmessage_visible: true})
+
+              }
+            });
 
       })
 
@@ -243,7 +314,28 @@ class VoterList extends Component {
          </Grid.Row>
      </Grid>
 
+     <Message className={this.state.is_resetmessage_visible? "visible" : "hidden"}
+        success
+        header='The account was reset successfully'
+        content='Now the account owner is able to register for the election again'
+      />
+
+      <Message className={this.state.is_tobeacceptmessage_visible? "visible" : "hidden"}
+         success
+         header='The account was added to to be accepted list'
+         content='sent to district office for further review'
+       />
+
+       <Message className={this.state.is_acceptmessage_visible? "visible" : "hidden"}
+          success
+          header='The account was accepted successfully'
+          content='Now the account owner is able to vote for the election'
+        />
+
       <Grid celled className={this.state.is_grid_visible? "visible" : "hidden"}>
+      <Dimmer active={this.state.loaderstate}  inverted>
+       <Loader inverted />
+       </Dimmer>
         <Grid.Row>
           <Grid.Column width={3}>
                <Card.Group>
