@@ -25,8 +25,8 @@ class Results extends Component {
    //this.queryCandidateDetails();
  }
 
- handleAddCandidate = (candidateName,party) => {
-  this.setState({ candidates: this.state.candidates.concat([{ name: candidateName, party: party }]) });
+ handleAddCandidate = (candidateName,party,votesreceived) => {
+  this.setState({ candidates: this.state.candidates.concat([{ name: candidateName, party: party,votes: votesreceived }]) });
  }
 
  handleVotes = (votesreceived) => {
@@ -51,13 +51,15 @@ queryNumofCandidates (){
        if(err) console.error('An error occured ::', err);
        //console.log(result);
        console.log(web3.toUtf8(result[0]));
-       this.handleAddCandidate(web3.toUtf8(result[0]),web3.toUtf8(result[2]))
+      // this.handleAddCandidate(web3.toUtf8(result[0]),web3.toUtf8(result[2]))
      //  console.log(web3.toUtf8(result[1]));
      //  console.log(web3.toUtf8(result[2]));
           //get results for valid candidate
-          totalVotesFor(i+1,(err,result) => {
+          totalVotesFor(i+1,(err,res) => {
              if(err) console.error('An error occured ::', err);
-             this.handleVotes(result.toNumber())
+            // this.handleVotes(result.toNumber())
+            this.handleAddCandidate(web3.toUtf8(result[0]),web3.toUtf8(result[2]),res.toNumber())
+
 
           });
 
@@ -89,22 +91,14 @@ render(){
                      <Label>
                      {candidate.party}
                      </Label>
-                    </Form.Field>
-                  ))}
-              </Form>
-        </Grid.Column>
-        <Grid.Column>
-             <Form>
-                  <h4>Votes</h4>
-                  {this.state.votes.map((votes,i) => (
-                    <Form.Field key={i}>
                      <Label>
-                     { votes.votecount}
+                     {candidate.votes}
                      </Label>
                     </Form.Field>
                   ))}
               </Form>
         </Grid.Column>
+
       </Grid>
     </Segment>
 

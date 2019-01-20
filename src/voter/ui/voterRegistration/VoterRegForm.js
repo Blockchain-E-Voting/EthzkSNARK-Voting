@@ -82,7 +82,7 @@ getTransactionReceiptMined = function getTransactionReceiptMined(txHash, interva
        console.error(error);
      }
 
-     that.setState({ loaderstate: true}) 
+     that.setState({ loaderstate: true})
      voterContractInstance=voterCon;
      voterContractInstance.addVoter(fullname,nic,secret0,secret1,{from: coinbase}, (error, txHash) => {
        if (error) { throw error }
@@ -90,7 +90,7 @@ getTransactionReceiptMined = function getTransactionReceiptMined(txHash, interva
       txhash = txHash;
       return this.getTransactionReceiptMined(txhash).then(function (receipt) {
           if(receipt.status = '0x1'){
-            that.setState = { loaderstate: false}
+            that.setState({ loaderstate: false});
             that.props.onClickNextUi();
           }
         });

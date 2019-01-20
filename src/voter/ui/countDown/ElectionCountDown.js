@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import store from '../../../store'
 import Countdown from 'react-countdown-now';
-import { Image, Reveal } from "semantic-ui-react";
+import { Image, Reveal, Button, Label } from "semantic-ui-react";
 import  ElectionForm  from '../electionForm/ElectionForm'
 import ProofForm from '../proof/ProofForm'
 import { VoterContract } from './../../../abi/voterContract'
@@ -283,7 +283,23 @@ render(){
     return <ElectionForm changetoNextUi={this.props.changeToResultUi} />
   } else {
     // Render a countdown
-    return <span>{hours}:{minutes}:{seconds}</span>;
+    return <div>
+    <a href='/sha256hashgenerate.code' download>
+    <Button> Download Arithmatic circuit </Button>
+    </a>
+    <a href='/sha256hashgenerate.code' download>
+    <Button> Download Proving Key </Button>
+    </a> <br/><br/><br/>
+     <div className='rows'>
+     <div className='row'>
+      <span>
+      <Label  style={{ fontSize: 50, color: '#ad6969' }}>{hours}h</Label>:
+      <Label  style={{ fontSize: 50, color: '#ad6969' }}>{minutes}m:</Label>
+      <Label  style={{ fontSize: 50, color: '#ad6969' }}> {seconds}s </Label>
+      </span>
+      </div>
+    </div>
+    </div>;
   }
 };
 
@@ -291,7 +307,7 @@ render(){
   return(
     <div>
     <Countdown
-    date={Date.now() + 5000}
+    date={Date.now() + 10000}
     renderer={renderer}
   />
 

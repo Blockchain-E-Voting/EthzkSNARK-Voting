@@ -11,12 +11,42 @@ class ElectionForm extends Component {
     this.queryNumofCandidates=this.queryNumofCandidates.bind(this)
     this.handleAddCandidate=this.handleAddCandidate.bind(this)
     this.handleFormSubmit=this.handleFormSubmit.bind(this)
+    this.getTransactionReceiptMined = this.getTransactionReceiptMined.bind(this)
     this.state = {
       name: '',
       candidates: [],
+      loaderstate: false
     };
 
   }
+
+
+  getTransactionReceiptMined = function getTransactionReceiptMined(txHash, interval) {
+      const self = this;
+       let web3 = store.getState().web3.web3Instance;
+      const transactionReceiptAsync = function(resolve, reject) {
+          web3.eth.getTransactionReceipt(txHash, (error, receipt) => {
+              if (error) {
+                  reject(error);
+              } else if (receipt == null) {
+                  setTimeout(
+                      () => transactionReceiptAsync(resolve, reject),
+                      interval ? interval : 500);
+              } else {
+                  resolve(receipt);
+              }
+          });
+      };
+
+      if (Array.isArray(txHash)) {
+          return Promise.all(txHash.map(
+              oneTxHash => self.getTransactionReceiptMined(oneTxHash, interval)));
+      } else if (typeof txHash === "string") {
+          return new Promise(transactionReceiptAsync);
+      } else {
+          throw new Error("Invalid Type: " + txHash);
+      }
+  };
 
   handleFormSubmit(event){
     event.preventDefault()
@@ -121,14 +151,25 @@ class ElectionForm extends Component {
    ElectioncontractInstance = web3.eth.contract(abi).at('0xB0110635A904588BaCC1DA6Ac1c8dd651f323864')
    const { voteForCandidate } = ElectioncontractInstance
 
+   var txhash;
    web3.eth.getCoinbase((error, coinbase) => {
      if (error) {
        console.error(error);
      }
+
+     that.setState({ loaderstate: true })
      for (const checkbox of this.selectedCheckboxes) {
        voteForCandidate(checkbox,{from: coinbase},(err,result) => {
          if(err) console.error('An error occured ::', err);
-         that.props.changetoNextUi();
+         txhash = result;
+         return this.getTransactionReceiptMined(txhash).then(function (receipt) {
+             if(receipt.status = '0x1'){
+               that.setState ({ loaderstate: false})
+               //that.props.onClickNextUi();
+               that.props.changetoNextUi();
+             }
+           });
+
 
        })
     }
