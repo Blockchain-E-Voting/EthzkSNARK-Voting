@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Input, Header,Grid,Button, Message } from 'semantic-ui-react'
+import { Image, Input, Header,Grid,Button, Message,Table, Container } from 'semantic-ui-react'
 
 class Home extends Component {
 
@@ -79,7 +79,46 @@ class Home extends Component {
         </Grid.Column>
       </Grid.Row>
     </Grid>
+    <Container>
+    <br/><br/>
+    <Table basic='very'>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Contract</Table.HeaderCell>
+          <Table.HeaderCell>Contract address</Table.HeaderCell>
+          <Table.HeaderCell>Link</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
 
+      <Table.Body>
+        <Table.Row>
+          <Table.Cell>Authentication</Table.Cell>
+          <Table.Cell>0x63b777d68B47A201ecE2c1D240d580f3e6d22074</Table.Cell>
+          <Table.Cell><a href="https://rinkeby.etherscan.io/address/0x63b777d68B47A201ecE2c1D240d580f3e6d22074">View</a></Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Candidate</Table.Cell>
+          <Table.Cell>0x8B74F1C1235f2dC2821338bcA739cD70306D394F</Table.Cell>
+          <Table.Cell><a href="https://rinkeby.etherscan.io/address/0x8B74F1C1235f2dC2821338bcA739cD70306D394F">View</a></Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Voter</Table.Cell>
+          <Table.Cell>0x61A298ef4F03a31824B320A4Fa42Dc86184DE3Be</Table.Cell>
+          <Table.Cell><a href="https://rinkeby.etherscan.io/address/0x61a298ef4f03a31824b320a4fa42dc86184de3be">View</a></Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Election</Table.Cell>
+          <Table.Cell>0xB0110635A904588BaCC1DA6Ac1c8dd651f323864</Table.Cell>
+          <Table.Cell><a href="https://rinkeby.etherscan.io/address/0xB0110635A904588BaCC1DA6Ac1c8dd651f323864">View</a></Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Verifier</Table.Cell>
+          <Table.Cell>0x3e8012DD6e54D42BB386eeB83375a53bB47B067D</Table.Cell>
+          <Table.Cell><a href="https://rinkeby.etherscan.io/address/0x3e8012DD6e54D42BB386eeB83375a53bB47B067D">View</a></Table.Cell>
+        </Table.Row>
+      </Table.Body>
+    </Table>
+    </Container>
       </main>
 
 
