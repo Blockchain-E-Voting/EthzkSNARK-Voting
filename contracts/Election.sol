@@ -7,7 +7,7 @@ contract Election{
 
 	mapping(uint=>uint8) public votesReceived;
 
-	uint[] public candidateList=[1,2];
+	uint[] public candidateList=[1,2,3];
 
 
 	function totalVotesFor(uint candidate) view public returns (uint8){

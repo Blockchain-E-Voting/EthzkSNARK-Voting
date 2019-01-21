@@ -307,7 +307,7 @@ render(){
   return(
     <div>
     <Countdown
-    date={Date.now() + 10000}
+    date={Date.now() + 20000}
     renderer={renderer}
   />
 

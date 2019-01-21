@@ -40,8 +40,10 @@ render(){
 
       return(
         <div>
+        Your vote was successful. <br/>Thanks for voting. Please note down your vote id<br/>
+        Your vote id is: {this.props.voteId}
         <Countdown
-        date={Date.now() + 3000}
+        date={Date.now() + 15000}
         renderer={ renderer }/>
         </div>
       )

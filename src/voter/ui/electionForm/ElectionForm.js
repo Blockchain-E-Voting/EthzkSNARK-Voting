@@ -166,7 +166,7 @@ class ElectionForm extends Component {
              if(receipt.status = '0x1'){
                that.setState ({ loaderstate: false})
                //that.props.onClickNextUi();
-               that.props.changetoNextUi();
+               that.props.changetoNextUi(txhash);
              }
            });
 

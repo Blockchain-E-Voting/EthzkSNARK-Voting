@@ -87,23 +87,37 @@ render(){
       <Grid columns={2} relaxed='very' stackable>
         <Grid.Column>
              <Form>
-                  <h4>Candidates</h4>
+                  <h4>Election Results</h4>
                   {this.state.candidates.map((candidate,i) => (
                     <Form.Field key={i}>
+                    <Grid columns={4} relaxed='very' stackable>
+                      <Grid.Column>
                     <Label as='a' image>
                        <img src='https://react.semantic-ui.com/images/avatar/small/joe.jpg' />
-                       {candidate.name}
-                     </Label>
+                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </Label>
+                    </Grid.Column>
+                    <Grid.Column>
+                    <Label>
+                      {candidate.name}
+                    </Label>
+                       </Grid.Column>
+                      <Grid.Column>
                      <Label>
                      {candidate.party}
                      </Label>
-                     <Label>
+                       </Grid.Column>
+                         <Grid.Column>
+                     <Label color='red'>
                      {candidate.votes}
                      </Label>
+                       </Grid.Column>
+                     </Grid>
                     </Form.Field>
                   ))}
               </Form>
         </Grid.Column>
+          <Grid.Column>
         <div
           style={{
             width: "400px",
@@ -125,7 +139,7 @@ render(){
             ]}
           />
           </div>
-        <Grid.Column>
+
 
         </Grid.Column>
 

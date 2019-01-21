@@ -23,7 +23,8 @@ class Dashboard extends Component {
           deleted:'',
           verified:'',
           accountstatus : '',
-          voted : ''
+          voted : '',
+          voteid: ''
       }
     this.changeuistage2 = this.changeuistage2.bind(this);
     this.changeuistage5 = this.changeuistage5.bind(this);
@@ -117,11 +118,14 @@ class Dashboard extends Component {
    });
  }
 
- changeuistage5(){
+ changeuistage5(txhash){
+   this.setState({voteid:txhash})
    this.setState({
      accountstatus:"Your voting has been casted correctly. Wait for the results",
      stage1:false, stage2:false,stage3:false,stage4:false,stage5:true
    });
+   //console.log("working")
+   //console.log(txhash)
 
  }
 
@@ -136,7 +140,7 @@ class Dashboard extends Component {
    }else if(this.state.stage4){
      content= <ElectionCountDown changeToResultUi={this.changeuistage5}/>
    }else if(this.state.stage5){
-     content= <ResultCountDown/>
+     content= <ResultCountDown voteId={ this.state.voteid }/>
    }
 
     return(
